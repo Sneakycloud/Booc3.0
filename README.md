@@ -8,6 +8,7 @@ Github handle - Firstname Lastname
 
 * ebbabrage - Ebba Brage
 * sandzan - Sandra Carlsson
+* sneakycloud - Eddie Olofsgård
 
 
 
