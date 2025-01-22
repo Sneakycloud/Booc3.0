@@ -1,13 +1,11 @@
 # Booc
-This is an app where you can create and schedule meetings and events. Don't miss any events by following people and get a notice when someone uploads a new event. Keep track of everything on your personal page.
+This is an app where you can create and schedule meetings and events. Don't miss any events by following people and get a notice when someone uploads a new event. Keep track of everything on your personal page. In this fork we will continue developing the application and make it Scalable and Fault Tolerant.
 
 
-Group 3 - List of members
+Group 7 - List of members
 ---------
 Github handle - Firstname Lastname
 
-* Sneakycloud - Eddie Olofsgård
-* sodqv - Sara Odqvist
 * ebbabrage - Ebba Brage
 * sandzan - Sandra Carlsson
 
