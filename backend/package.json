@@ -15,10 +15,14 @@
     "express": "~4.16.1",
     "express-session": "^1.18.0",
     "http-errors": "~1.6.3",
+    "i": "^0.3.7",
     "jade": "~1.11.0",
     "mongodb": "^6.9.0",
     "mongoose": "^8.6.4",
     "morgan": "~1.9.1",
-    "socket.io": "^4.8.0"
+    "npm": "^11.0.0",
+    "socket.io": "^4.8.0",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   }
 }

@@ -8,6 +8,9 @@ var logger = require('morgan');
 var cors = require("cors");
 const dotenv = require("dotenv").config();
 var MongoDBStore = require('connect-mongodb-session')(session);
+const winstoneLogger = require("./Service/winstoneLogger");
+const loggerFormatter = require("./Service/httpRequestFormatter");
+const responseInterceptor = require("./Service/responseInterceptor");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -33,11 +36,6 @@ io = new Server(server,{
 });
 
 app.io = io;
-
-app.use(function(req, res, next){
-  //console.log("Testing")
-  next();
-})
 
 
 
@@ -101,7 +99,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
+app.use(function(req, res, next){
+  //console.log("Testing")
 
+  winstoneLogger.info("Detected request", loggerFormatter(req,res, {}));
+  //winstoneLogger.info("Detected request", {testProperty: "auth"});
+  next();
+})
+*/
 
 /*
 app.use((req, res, next) => {
@@ -115,13 +121,7 @@ app.use((req, res, next) => {
 //   autoSave: true,
 // }));
 
-
-
-// app.use(function(rec, res, next) {
-//   console.log(rec.session);
-//   next();
-// })
-
+app.use(responseInterceptor);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/api", apiRouter);
