@@ -84,6 +84,8 @@ yarn-error.log*
 /frontend/node_modules/.cache/default-development
 *.pack
 
+/backend/logs
+
 
 *.old
 *.pack

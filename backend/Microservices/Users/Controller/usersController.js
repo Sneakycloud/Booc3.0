@@ -1,14 +1,5 @@
 const usersModel = require('../model/usersModel.js');
 
-const axios = require('axios');
-//Forward to microservice function
-async function forwardToService(req,res){
-    const {data} = await axios(FORWARD_URL, req, {
-        responseType: 'stream'
-    });
-
-    data.pipe(res);
-}
 
 //
 //Get user info
