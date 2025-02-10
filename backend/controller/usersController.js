@@ -15,7 +15,7 @@ async function getCurrentUser(req, res){
                 username: req.session.user.username,
                 identifier: req.session.user.identifier,
         }});
-        if(response.data.user == "") res.status(500).send({msg:"Failed to get current user"});
+        if(response.data.user == "" || response.data.msg == "Failed to get current user") res.status(500).send({msg:"Failed to get current user"});
         req.session.user = {id:req.session.id, ...response.data.user, password:req.session.user.password, socket:req.session.socket};
 
         //Returns user session
@@ -25,7 +25,6 @@ async function getCurrentUser(req, res){
         return res.status(200).send(req.session.user);
     }
     catch(err){
-        console.log("got to here 2");
         console.log(err);
         return res.status(500).send({msg:"Failed to get current user"});
     }
@@ -33,52 +32,105 @@ async function getCurrentUser(req, res){
 
 //Create user
 async function createUser(req, res){
-    const {body: {email, username, password}} = req;
-    const result = await usersModel.createUser(email, username, password);
-    if(result === "All identifiers used"){
-        return res.status(500).send({msg:"All identifiers used for this username"});
+    try{
+        const {body: {email, username, password}} = req;
+        //uses axios to send data to the user microservice
+        const result = await axios.post(`http://localhost:4000/api/users`, 
+            {
+                email: email,
+                username: username,
+                password: password,
+            },   
+        );
+
+        if(result.data.user == "" || result.data.msg == "Failed to create user") res.status(500).send({msg:"Failed to create user"});
+
+        if(result.data.user === "All identifiers used"){
+            return res.status(500).send({msg:"All identifiers used for this username"});
+        }
+        //console.log(result);
+        if(typeof result.data.user !== "undefined"){
+            req.session.user = {id:req.session.id, ...result.data.user, password:password, socket:req.session.socket};
+            return res.status(200).send({msg:"Created user"});
+        }
+        else{
+            return res.status(500).send({msg:"Failed to create user"});
+        }
     }
-    //console.log(result);
-    if(typeof result !== "undefined"){
-        req.session.user = {id:req.session.id, ...result, password:password, socket:req.session.socket};
-        return res.status(200).send({msg:"Created user"});
-    }
-    else{
+    catch{
+        console.log("Failed to create user because of err");
         return res.status(500).send({msg:"Failed to create user"});
     }
+
 }
 
 
 async function changeStartPage(req, res) {
-    const result = await usersModel.changeStartPage(req.session.user.email, req.session.user.password, req.body.startPage);
-    if(result){
-        return res.status(200).send({msg:"Changed start page"});
+    try{
+        //uses axios to send data to the user microservice
+        const result = await axios.put(`http://localhost:4000/api/users`, 
+            {
+                email: req.session.user.email,
+                password: req.session.user.password,
+                startPage: req.body.startPage
+            },   
+        );
+
+        if(result.data.result){
+            return res.status(200).send({msg:"Changed start page"});
+        }
+        else{
+            return res.status(500).send({msg:"Failed to change start page"});
+        }
     }
-    else{
+    catch{
         return res.status(500).send({msg:"Failed to change start page"});
     }
+    
 }
 
 
 async function changePassword(req, res) {
-    const result = await usersModel.changePassword(req.session.user.email, req.session.user.password, req.body.password);
-    if(result){
-        //Change the session to be the new password
-        req.session.user.password = req.body.password;
+    try{
+        //uses axios to send data to the user microservice
+        const result = await axios.put(`http://localhost:4000/api/password`, 
+            {
+                email: req.session.user.email,
+                password: req.session.user.password,
+                newPassword: req.body.password
+            },   
+        );
 
-        return res.status(200).send({msg:"Changed users password"});
+        if(result.data.result){
+            //Change the session to be the new password
+            req.session.user.password = req.body.password;
+
+            return res.status(200).send({msg:"Changed users password"});
+        }
+        else{
+            return res.status(500).send({msg:"Failed to change password"});
+        }
     }
-    else{
+    catch{
         return res.status(500).send({msg:"Failed to change password"});
     }
+
+    
 }
 
 
 async function deleteUser(req, res) {
     try{
-        const result = await usersModel.deleteUser(req.session.user.email, req.session.user.password);
+        //uses axios to send data to the user microservice
+        const result = await axios.delete(`http://localhost:4000/api/users`, 
+            {data: {
+                email: req.session.user.email,
+                password: req.session.user.password,
+            }},   
+        );
 
-        if(result){
+        console.log(result);
+        if(result.data?.result){
             return res.status(200).send({msg:"Deleted user"});
         }
         else{
