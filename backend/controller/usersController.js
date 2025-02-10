@@ -1,16 +1,7 @@
 const usersModel = require('../model/usersModel.js');
 
 const axios = require('axios');
-//Forward to microservice function
-async function forwardToService(req,res){
-    const {data} = await axios(FORWARD_URL, req, {
-        responseType: 'stream'
-    });
 
-    data.pipe(res);
-}
-
-//
 //Get user info
 async function getCurrentUser(req, res){
     try{
@@ -18,8 +9,14 @@ async function getCurrentUser(req, res){
         if(!req.session.user){return res.status(401).send({msg:"Cannot find session"})}
 
         //Updates user session before returning it
-        const databaseUser = await usersModel.getUserWithUsername(req.session.user.username, req.session.user.identifier);
-        req.session.user = {id:req.session.id, ...databaseUser, password:req.session.user.password, socket:req.session.socket};
+        //uses axios to retrive data from the user microservice
+        const response = await axios.get(`http://localhost:4000/api/users`, 
+            {params: {
+                username: req.session.user.username,
+                identifier: req.session.user.identifier,
+        }});
+        if(response.data.user == "") res.status(500).send({msg:"Failed to get current user"});
+        req.session.user = {id:req.session.id, ...response.data.user, password:req.session.user.password, socket:req.session.socket};
 
         //Returns user session
         if(!req.session.user){
@@ -28,10 +25,10 @@ async function getCurrentUser(req, res){
         return res.status(200).send(req.session.user);
     }
     catch(err){
+        console.log("got to here 2");
         console.log(err);
         return res.status(500).send({msg:"Failed to get current user"});
     }
-    
 }
 
 //Create user
@@ -106,34 +103,3 @@ module.exports = {
     changeStartPage,
     changePassword,
 }
-
-
-
-
-
-
-
-
-
-//Get user info
-/*
-export function getUser(req, res){
-    if(!req.session.user){
-        return res.status(401).send({msg:"Not authenticated"})
-    }
-    //Extract parameters from req
-    const {body: {email, password}} = req;
-    //Search database and checks if the user exists
-    const user = getUserModel(email, password);
-    if(!user){
-        return res.status(403).send({msg:"Did not find user"});
-    }
-
-    //Copies object but removes password
-    const returnUser = {email:user.email, username:user.username, description:user.description, startingPage:user.startingPage}
-
-    return res.status(200).send(returnUser);
-}
-*/
-
-//Save info

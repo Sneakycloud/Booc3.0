@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 const {mongoose} = require("mongoose")
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
 
 function startMongodb(){
     //`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@booc.oduvk.mongodb.net/?retryWrites=true&w=majority&appName=Booc `

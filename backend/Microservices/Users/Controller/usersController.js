@@ -5,21 +5,17 @@ const usersModel = require('../model/usersModel.js');
 //Get user info
 async function getCurrentUser(req, res){
     try{
-        //Test if user exists
-        if(!req.session.user){return res.status(401).send({msg:"Cannot find session"})}
+        //Parse
+        const {username, identifier} = req.query;
+        console.log("query:", req.query);
 
         //Updates user session before returning it
-        const databaseUser = await usersModel.getUserWithUsername(req.session.user.username, req.session.user.identifier);
-        req.session.user = {id:req.session.id, ...databaseUser, password:req.session.user.password, socket:req.session.socket};
-
-        //Returns user session
-        if(!req.session.user){
-            return res.status(401).send({msg:"Not authenticated"})
-        }
-        return res.status(200).send(req.session.user);
+        const databaseUser = await usersModel.getUserWithUsername(username, identifier);
+        return res.status(200).send({user: databaseUser})
+        
     }
     catch(err){
-        console.log(err);
+        console.log("Failed in function getCurrentUser\n",err);
         return res.status(500).send({msg:"Failed to get current user"});
     }
     
