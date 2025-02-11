@@ -1,36 +1,51 @@
 const usersModel = require('../model/usersModel.js');
+const axios = require('axios');
 
 //Checks if the given credentials are a valid login.
 async function authenicate(req, res){
-    //Extract parameters from req
-    const {body: {email, password}} = req;
-
-    //Check auth
-    const user = await usersModel.getUser(email, password);
-
-    //Exists
-    if(!user || user == null || user == "Failed to find"){
-        console.log("Invalid credentials");
+    try{
+        //Extract parameters from req
+        const {body: {email, password}} = req;
+        console.log("Hello 1\n");
+        const response = await axios.get(`http://localhost:4000/api/auth`, 
+            {params: {
+                email: email,
+                password: password,
+        }});
+        console.log("Hello 2\n");
+        const user = response.data?.user;
+        console.log("Hello 3\n");
+        //Exists
+        if(!user || user == null || user == "Failed to find"){
+            console.log("Invalid credentials");
+            return res.status(401).send({msg: "Bad credentials"});
+        }
+        else{
+            console.log("valid credentials");
+            //Updates session
+            const recastUser = user;
+            req.session.user = {...recastUser, password:password};
+            const {startingPage: startingPage} = recastUser;
+            return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage});
+        }
+    }
+    catch(err){
+        console.log("Invalid credentials due to error:\n");
+        console.log(err);
         return res.status(401).send({msg: "Bad credentials"});
     }
-    else{
-        console.log("valid credentials");
-        //Updates session
-        const recastUser = user;
-        req.session.user = {...recastUser, password:password};
-        //res.cookie("user", recastUser, );
-        const {startingPage: startingPage} = recastUser;
-        return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage});
-    }
+    
 }
 
 //Check if user is logged in
 async function authStatus(req, res){
-    //const {body: {email, password}} = req;
     try{
-        //console.log(req.session.user.email);
-        //console.log(req.session.user.password);
-        const user = await usersModel.getUser(req.session.user.email, req.session.user.password);
+        const user = (await axios.get(`http://localhost:4000/api/auth`, 
+            {params: {
+                email: req.session.user.email,
+                password: req.session.user.password,
+        }})).data.user
+
         //console.log(user);
         if(typeof req.session.user === "undefined"|| typeof user === "undefined" || user === "Failed to find" || user === null){
             return res.status(401).send({msg:"Not authenticated"})

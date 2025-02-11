@@ -17,6 +17,20 @@ async function getCurrentUser(req, res){
         console.log("Failed in function getCurrentUser\n",err);
         return res.status(500).send({msg:"Failed to get current user"});
     }
+}
+
+//Used by /Auth to check user credentials
+async function getUser(req, res){
+    try{
+        //Extract parameters from req
+        const {email, password} = req.query;
+        //Check auth
+        const user = await usersModel.getUser(email, password);
+        return res.status(200).send({user:user});
+    }
+    catch{
+        return res.status(500).send({msg:"Failed to getUser"})
+    }
     
 }
 
@@ -64,7 +78,8 @@ async function deleteUser(req, res) {
 
 
 module.exports = {
-    getCurrentUser,    
+    getCurrentUser, 
+    getUser,   
     createUser,
     deleteUser,
     changeStartPage,

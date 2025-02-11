@@ -1,5 +1,6 @@
 var express = require('express');
 const {getCurrentUser,
+    getUser,
     createUser, 
     deleteUser, 
     changePassword,
@@ -11,6 +12,9 @@ router.get("/users", getCurrentUser);
 router.post("/users", createUser);
 router.put("/users", changeStartPage);
 router.delete("/users", deleteUser);
+
+//Auth
+router.get("/auth", getUser);
 
 //Password
 router.put("/password", changePassword);
