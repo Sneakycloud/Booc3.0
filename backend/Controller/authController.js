@@ -6,15 +6,14 @@ async function authenicate(req, res){
     try{
         //Extract parameters from req
         const {body: {email, password}} = req;
-        console.log("Hello 1\n");
         const response = await axios.get(`http://localhost:4000/api/auth`, 
             {params: {
                 email: email,
                 password: password,
         }});
-        console.log("Hello 2\n");
+
         const user = response.data?.user;
-        console.log("Hello 3\n");
+
         //Exists
         if(!user || user == null || user == "Failed to find"){
             console.log("Invalid credentials");
