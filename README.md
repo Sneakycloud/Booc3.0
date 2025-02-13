@@ -42,6 +42,14 @@ SESSION_SECRET= place your session secret here
 
 5. For debugging run "SET DEBUG=backend:* & npm start" in the cmd(this has a problem with doing it in vscode) or if you are running it for production "npm start".
 
+Starting microserver
+---------
+1. Clone repository
+2. Go into "Backend/Microservices/Users" folder.
+3. Open cmd in current di
+4. Run "npm ci"
+5. Run "node usersMs.js"
+
 Preliminary List of Features
 ----------
 - user accounts
