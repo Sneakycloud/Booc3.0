@@ -6,7 +6,7 @@ async function authenicate(req, res){
     try{
         //Extract parameters from req
         const {body: {email, password}} = req;
-        const response = await axios.get(`http://localhost:4000/api/auth`, 
+        const response = await axios.get(`users-microservice/api/auth`, 
             {params: {
                 email: email,
                 password: password,
@@ -39,7 +39,7 @@ async function authenicate(req, res){
 //Check if user is logged in
 async function authStatus(req, res){
     try{
-        const user = (await axios.get(`http://localhost:4000/api/auth`, 
+        const user = (await axios.get(`users-microservice/api/auth`, 
             {params: {
                 email: req.session.user.email,
                 password: req.session.user.password,
