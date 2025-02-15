@@ -16,9 +16,6 @@ on:
 jobs:
   user-microservice:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'backend/Microservices/Users' # Sets default path for "run" commands to the video-storage subfolder.
     
     # Sets environment variables with values extracted from GitHub Actions Repository Secrets.
     env:
@@ -51,6 +48,7 @@ jobs:
 
       # Publishes the Docker image to the Azure Container Registry.
       - name: Publish
+        working-directory: 'backend/Microservices/Users' # Sets default path for "run" commands to the video-storage subfolder.
         run: |
           echo $CONTAINER_REGISTRY_PASSWORD | docker login $CONTAINER_REGISTRY_LOGIN_SERVER --username $CONTAINER_REGISTRY_USERNAME --password-stdin
           docker push $CONTAINER_REGISTRY_LOGIN_SERVER/user_microservice:$VERSION
@@ -65,4 +63,5 @@ jobs:
       # Expands the manifest YAML file (i.e. replaces placeholders in the YAML file with environment variable values)
       # and deploys the microservice to the Azure Kubernetes Service (AKS) cluster.
       - name: Deploy
+        working-directory: 'backend/Microservices/Users' # Sets default path for "run" commands to the video-storage subfolder.
         run: envsubst < Manifests/deploy.yaml | kubectl apply -f -
