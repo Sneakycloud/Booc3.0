@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Backend-app
+  name: backend-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: Backend-app
+      app: backend-app
   template:
     metadata:
       labels:
-        app: Backend-app
+        app: backend-app
     spec:
       containers: 
-      - name: Backend-app
-        image: BoocApp.azurecr.io/Backend-app:1
+      - name: backend-app
+        image: BoocApp.azurecr.io/backend-app:1
         imagePullPolicy: IfNotPresent
         env:
         - name: PORT
@@ -30,10 +30,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: Backend-app
+  name: backend-app
 spec:
   selector:
-    app: Backend-app
+    app: backend-app
   type: LoadBalancer
   ports:
     - protocol: TCP
