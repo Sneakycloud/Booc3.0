@@ -18,7 +18,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: PORT
-          value: "3000"
+          value: "6400"
         resources:
           requests:
             cpu: 128m
@@ -38,4 +38,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 3000
+      targetPort: 6400
