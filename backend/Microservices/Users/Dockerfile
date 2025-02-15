@@ -1,7 +1,7 @@
 FROM node:19.9.0-alpine
 
 WORKDIR /usr/src/app
-COPY ../../package*.json ./
+COPY backend/package*.json ./
 COPY backend/Microservices/Users/usersMs.js ./
 RUN npm ci --omit=dev
 COPY backend/Microservices/Users/Controller ./Controller
