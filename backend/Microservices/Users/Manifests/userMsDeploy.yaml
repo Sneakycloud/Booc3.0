@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users_microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users_microservice
+  template:
+    metadata:
+      labels:
+        app: users_microservice
+    spec:
+      containers: 
+      - name: users_microservice
+        image: BoocApp.azurecr.io/users_microservice:1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PORT
+          value: "4000"
+        resources:
+          requests:
+            cpu: 128m
+            memory: 128Mi
+          limits:
+            cpu: 256m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users_microservice
+spec:
+  selector:
+    app: users_microservice
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4000

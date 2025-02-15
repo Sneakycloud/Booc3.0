@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Backend_app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Backend_app
+  template:
+    metadata:
+      labels:
+        app: Backend_app
+    spec:
+      containers: 
+      - name: Backend_app
+        image: BoocApp.azurecr.io/Backend_app:1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PORT
+          value: "3000"
+        resources:
+          requests:
+            cpu: 128m
+            memory: 128Mi
+          limits:
+            cpu: 256m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: Backend_app
+spec:
+  selector:
+    app: Backend_app
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
