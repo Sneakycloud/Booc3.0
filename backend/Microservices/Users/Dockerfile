@@ -2,7 +2,7 @@ FROM node:19.9.0-alpine
 
 WORKDIR /usr/src/app
 COPY ../../package*.json ./
-COPY userMS.js ./
+COPY userMs.js ./
 RUN npm ci --omit=dev
 COPY ./Controller ./Controller
 COPY ./Model ./Model
