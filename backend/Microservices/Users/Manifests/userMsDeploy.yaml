@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users_microservice
+  name: users-microservice
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: users_microservice
+      app: users-microservice
   template:
     metadata:
       labels:
-        app: users_microservice
+        app: users-microservice
     spec:
       containers: 
-      - name: users_microservice
-        image: BoocApp.azurecr.io/users_microservice:1
+      - name: users-microservice
+        image: BoocApp.azurecr.io/users-microservice:1
         imagePullPolicy: IfNotPresent
         env:
         - name: PORT
@@ -30,10 +30,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: users_microservice
+  name: users-microservice
 spec:
   selector:
-    app: users_microservice
+    app: users-microservice
   type: ClusterIP
   ports:
     - protocol: TCP
