@@ -2,10 +2,10 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 export const api = axios.create({
-    baseURL: "http://localhost:6400",
+    baseURL: "http://http://9.163.80.93:80/",
     withCredentials: true,
     headers:{
-      "Access-Control-Allow-Origin": "http://localhost:6400",
+      "Access-Control-Allow-Origin": "http://http://9.163.80.93:80/",
       "Access-Control-Allow-Credentials":"true",
     }
   })
