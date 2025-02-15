@@ -38,6 +38,7 @@ jobs:
       
       # Installs NPM packages and tests the microservice.
       - name: Test
+        working-directory: 'backend' # Sets default path for "run" commands to the video-storage subfolder.
         run: |
           npm ci
       #    npm test
