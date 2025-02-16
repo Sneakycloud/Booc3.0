@@ -43,7 +43,7 @@ async function authStatus(req, res){
             {params: {
                 email: req.session.user.email,
                 password: req.session.user.password,
-        }})).data.user
+        }})).data?.user
 
         console.log(user);
         if(typeof req.session.user === "undefined"|| typeof user === "undefined" || user === "Failed to find" || user === null){
@@ -51,7 +51,8 @@ async function authStatus(req, res){
         } 
         return res.status(200).send({msg:"You are authenticated"});
     }
-    catch{
+    catch(err){
+        console.log(err);
         return res.status(401).send({msg:"Not authenticated"})
     }
 }
