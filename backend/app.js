@@ -89,6 +89,14 @@ io.on('connection', (socket) => {
 
 })
 
+
+app.use((req, res, next) => {
+  console.log("got request")
+  return res.send({msg:"server recived message"});
+  next();
+});
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -109,12 +117,7 @@ app.use(function(req, res, next){
 })
 */
 
-/*
-app.use((req, res, next) => {
-  console.log(req.session)
-  next();
-});
-*/
+
 
 //IO uses shared session
 // io.use(sharedsession(session, {
