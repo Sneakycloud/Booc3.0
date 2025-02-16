@@ -1,5 +1,5 @@
 var express = require('express');
-const {authenicate, authStatus, removeAuth} = require("../controller/authController");
+const {authenicate, authStatus, removeAuth} = require("../Controller/authController");
 const {getCurrentUser,
     createUser, 
     deleteUser, 
