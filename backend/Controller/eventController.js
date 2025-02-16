@@ -9,7 +9,7 @@ const {createEvent:createEventModel,
 function inviteToObject(array){
     return {username:array[0], identifier:array[1]};
 }
-const { sendToSocket, getSocket } = require("../model/io_socket");
+const { sendToSocket, getSocket } = require("../Model/io_socket");
 
 //create event
 async function createEvent(req, res){
