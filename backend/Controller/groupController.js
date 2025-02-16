@@ -4,8 +4,8 @@ const {getGroup:getGroupModel,
     updateGroup:updateGroupModel,
     deleteGroup:deleteGroupModel,
     leaveGroup:leaveGroupModel,
-    checkIfOwner} =  require("../model/groupModel");
-const { sendToSocket, getSocket } = require("../model/io_socket");
+    checkIfOwner} =  require("../Model/groupModel");
+const { sendToSocket, getSocket } = require("../Model/io_socket");
 
 
 function inviteToObject(array){

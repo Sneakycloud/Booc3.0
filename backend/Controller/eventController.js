@@ -1,5 +1,5 @@
 
-const eventModel = require('../model/eventModel');
+const eventModel = require('../Model/eventModel');
 const {createEvent:createEventModel,
         deleteEventModel,
         checkIfCreator} = eventModel;

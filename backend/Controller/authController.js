@@ -1,4 +1,4 @@
-const usersModel = require('../model/usersModel.js');
+const usersModel = require('../Model/usersModel.js');
 const axios = require('axios');
 
 //Checks if the given credentials are a valid login.
