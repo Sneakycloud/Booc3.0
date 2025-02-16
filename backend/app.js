@@ -54,7 +54,7 @@ store.on('error', function(error) {
   console.log(error);
 });
 
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
 
 //Implements sessions
 app.use(session({
