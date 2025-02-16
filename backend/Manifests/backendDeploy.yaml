@@ -14,7 +14,7 @@ spec:
     spec:
       containers: 
       - name: backend-app
-        image: BoocApp.azurecr.io/backend-app:1
+        image: $CONTAINER_REGISTRY_LOGIN_SERVER/backend-app:$VERSION
         imagePullPolicy: IfNotPresent
         env:
         - name: PORT

@@ -14,7 +14,7 @@ spec:
     spec:
       containers: 
       - name: users-microservice
-        image: BoocApp.azurecr.io/users-microservice:1
+        image: $CONTAINER_REGISTRY_LOGIN_SERVER/users-microservice:$VERSION
         imagePullPolicy: IfNotPresent
         env:
         - name: PORT
