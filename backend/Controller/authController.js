@@ -42,6 +42,8 @@ async function authStatus(req, res){
         console.log(req?.session?.user);
         console.log(req?.headers);
         console.log(req?.session);
+        console.log(req?.sessionID);
+        console.log(req?.cookies);
         const user = (await axios.get(`http://users-microservice/api/auth`, 
             {params: {
                 email: req.session.user.email,
