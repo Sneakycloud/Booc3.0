@@ -3,6 +3,7 @@ const axios = require('axios');
 
 //Checks if the given credentials are a valid login.
 async function authenicate(req, res){
+    return res.status(200).send({msg:"got response"});
     try{
         //Extract parameters from req
         const {body: {email, password}} = req;
