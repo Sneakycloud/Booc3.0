@@ -61,6 +61,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   saveUninitialized: false, //turns off storing empty sessions
   resave: false,
+  proxy: true,
   cookie: {
     maxAge: 1000*60*60*24, //24 hours
     sameSite: "none",
