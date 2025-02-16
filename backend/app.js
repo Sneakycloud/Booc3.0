@@ -66,7 +66,6 @@ app.use(session({
   name: "sessionCookie",
   cookie: {
     maxAge: 1000*60*60*24, //24 hours
-    sameSite: "none",
     secure: false,
   },
   store: store,
