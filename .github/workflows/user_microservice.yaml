@@ -6,7 +6,7 @@ on:
   # Deploys the microservice on push to subfolder video-storage on the main branch of this code repository.
   push:
     branches:
-      - master
+      - main
     paths:
       - 'backend/Microservices/Users/**' # Only trigger on push to video-storage subfolder.
   
