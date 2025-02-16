@@ -89,13 +89,13 @@ io.on('connection', (socket) => {
 
 })
 
-
+/*
 app.use((req, res, next) => {
   console.log("got request")
   return res.send({msg:"server recived message"});
   next();
 });
-
+*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
