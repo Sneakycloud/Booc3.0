@@ -8,4 +8,4 @@ COPY backend/Microservices/Users/Controller ./Controller
 COPY backend/Microservices/Users/Model ./Model
 COPY backend/Microservices/Users/Router ./Router
 
-CMD node usersMS.js
+CMD node usersMs.js
