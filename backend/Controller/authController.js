@@ -39,7 +39,9 @@ async function authenicate(req, res){
 //Check if user is logged in
 async function authStatus(req, res){
     try{
-        console.log(req.session.user);
+        console.log(req?.session?.user);
+        console.log(req?.headers);
+        console.log(req?.session);
         const user = (await axios.get(`http://users-microservice/api/auth`, 
             {params: {
                 email: req.session.user.email,
