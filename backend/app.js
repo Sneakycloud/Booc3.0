@@ -21,6 +21,7 @@ var app = express();
 const http = require('http');
 const {Server} = require("socket.io");
 
+app.set("trust proxy", 1);
 
 const corsconfig = {
   origin: "http://localhost:3000",
@@ -54,7 +55,7 @@ store.on('error', function(error) {
   console.log(error);
 });
 
-app.set("trust proxy", 1);
+
 
 //Implements sessions
 app.use(session({
