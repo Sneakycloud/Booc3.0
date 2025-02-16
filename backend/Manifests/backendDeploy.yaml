@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-app
+  name: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend-app
+      app: backend
   template:
     metadata:
       labels:
-        app: backend-app
+        app: backend
     spec:
       containers: 
-      - name: backend-app
-        image: $CONTAINER_REGISTRY_LOGIN_SERVER/backend-app:$VERSION
+      - name: backend
+        image: $CONTAINER_REGISTRY_LOGIN_SERVER/backend:$VERSION
         imagePullPolicy: IfNotPresent
         env:
         - name: PORT
@@ -30,10 +30,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-app
+  name: backend
 spec:
   selector:
-    app: backend-app
+    app: backend
   type: LoadBalancer
   ports:
     - protocol: TCP
