@@ -58,7 +58,6 @@ data:
   server.crt: $CERTIFICATE
   server.key: $CERT_KEY
   
----
 #ingress with no public ip and terminates tls for backend
 #apiVersion: approuting.kubernetes.azure.com/v1alpha1
 #kind: NginxIngressController
