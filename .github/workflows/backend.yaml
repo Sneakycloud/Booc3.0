@@ -71,8 +71,8 @@ jobs:
       
       # Expands the manifest YAML file (i.e. replaces placeholders in the YAML file with environment variable values)
       # and deploys the microservice to the Azure Kubernetes Service (AKS) cluster.
-      - name: Deploy secrets
-        run: envsubst < \Manifests/secrets.yaml | kubectl apply -f -
+      #- name: Deploy secrets
+      #  run: envsubst < \Manifests/secrets.yaml | kubectl apply -f -
 
       - name: Deploy backend
         run: envsubst < \Manifests/backendDeploy.yaml | kubectl apply -f -
