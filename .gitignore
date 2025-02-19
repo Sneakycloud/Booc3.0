@@ -5,6 +5,7 @@
 /terraform/.terraform/
 /terraform/terraform.tfstate
 /terraform/terraform.tfstate.backup
+/terraform/terraform.*state
 node_modules
 scripts/flow/*/.flowconfig
 .flowconfig

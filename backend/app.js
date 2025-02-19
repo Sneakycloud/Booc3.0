@@ -21,7 +21,7 @@ var app = express();
 const http = require('http');
 const {Server} = require("socket.io");
 
-app.set("trust proxy", 1);
+app.set("trust proxy", 2);
 
 const corsconfig = {
   origin: "http://localhost:3000",
