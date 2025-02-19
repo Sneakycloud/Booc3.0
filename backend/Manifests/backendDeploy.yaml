@@ -48,6 +48,17 @@ spec:
       port: 80
       targetPort: 6400
 ---
+#This handles the tls secrets for the https ingress termination
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tls
+type: kubernetes.io/tls
+data:
+  server.crt: $CERTIFICATE
+  server.key: $CERT_KEY
+  
+---
 #ingress with no public ip and terminates tls for backend
 apiVersion: approuting.kubernetes.azure.com/v1alpha1
 kind: NginxIngressController
@@ -71,18 +82,7 @@ spec:
               service:
                 name: backend
                 port:
-                  number: 80  
----
-#This handles the tls secrets for the https ingress termination
-apiVersion: v1
-kind: Secret
-metadata:
-  name: backend-tls
-type: kubernetes.io/tls
-data:
-  server.crt: $CERTIFICATE
-  server.key: $CERT_KEY
-          
+                  number: 80     
 ---
 #This service will later be moved to the frontend and will act as the exposed public ip      
 apiVersion: v1
