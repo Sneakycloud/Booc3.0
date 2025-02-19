@@ -29,6 +29,8 @@ jobs:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      CERTIFICATE: ${{ secrets.CERTIFICATE }}
+      CERT_KEY: ${{ secrets.CERT_KEY }}
 
     steps:
 
