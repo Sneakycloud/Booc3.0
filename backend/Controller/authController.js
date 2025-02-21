@@ -44,7 +44,8 @@ async function authenicate(req, res){
 async function authStatus(req, res){
     try{
         console.log("Jwt: ",req.jwt)
-        console.log("headers: ", req.headers)
+        //console.log("headers: ", req.headers)
+        console.log("Token: ", req.jwt.token)
         const user = (await axios.get(`http://users-microservice/api/auth`, 
             {params: {
                 email: req.jwt.user.email,
