@@ -3,7 +3,7 @@ variable app_name {
 }
 
 output app_name {
-  value       = app_name
+  value       = var.app_name
 }
 
 

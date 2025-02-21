@@ -41,12 +41,10 @@ metadata:
 spec:
   ingressClassName: nginx
   tls:
-  - hosts:
-    - backend-ingress.local
-    secretName: backend-tls
+  - secretName: backend-tls
   rules:
-  - host: "backend-ingress.local"
-    http:
+#  - host: "backend-ingress.local"
+  - http:
       paths:
         - pathType: Prefix
           path: "/"
