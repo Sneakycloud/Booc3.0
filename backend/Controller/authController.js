@@ -25,7 +25,7 @@ async function authenicate(req, res){
             console.log("valid credentials");
             //Updates session
             const recastUser = user;
-            req.jwt.user = {...recastUser, password:password};
+            req.jwt.payload.user = {...recastUser, password:password};
             const {startingPage: startingPage} = recastUser;
             const token = (jwt.create(process.env.SESSION_SECRET, {...recastUser, password:password})).token;
             //token = jwt.sign({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
@@ -47,12 +47,12 @@ async function authStatus(req, res){
         console.log("headers: ", req.headers)
         const user = (await axios.get(`http://users-microservice/api/auth`, 
             {params: {
-                email: req.jwt.user.email,
-                password: req.jwt.user.password,
+                email: req.jwt.payload.user.email,
+                password: req.jwt.payload.user.password,
         }})).data.user
 
         //console.log(user);
-        if(typeof req.jwt.user === "undefined"|| typeof user === "undefined" || user === "Failed to find" || user === null){
+        if(typeof req.jwt.payload.user === "undefined"|| typeof user === "undefined" || user === "Failed to find" || user === null){
             return res.status(401).send({msg:"Not authenticated"})
         } 
         return res.status(200).send({msg:"You are authenticated"});
