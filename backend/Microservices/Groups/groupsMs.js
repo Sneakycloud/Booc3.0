@@ -14,5 +14,5 @@ app.use(function(req, res, next) {
 app.use("/api", router)
 
 app.listen(PORT, () => {
-  console.log(`Started "Users" microservice on port ${PORT}`);
+  console.log(`Started "Groups" microservice on port ${PORT}`);
 });

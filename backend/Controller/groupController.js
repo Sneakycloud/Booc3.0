@@ -19,7 +19,7 @@ async function getGroup(req, res){
     //Gets info
     const groupName = req.session.groupName;
     //var result = await getGroupModel(groupName);
-    const response = await axios.get(`http://localhost:8080/api/groups`,
+    const response = await axios.get(`http://localhost:8080/api/group`,
         {params: {
             groupname: groupName,
     }});
@@ -34,7 +34,7 @@ async function getGroup(req, res){
 async function getAllGroups(req, res){
     try{
         //var result = await getAllGroupsModel(req.session.user.username, req.session.user.identifier);
-        const response = await axios.all(`http://localhost:8080/api/groups`,
+        const response = await axios.get(`http://localhost:8080/api/groups`,
             {params: {
                 username: req.session.user.username,
                 identifier: req.session.user.identifier
@@ -62,7 +62,7 @@ async function createGroup(req, res){
         const owner = [{username:req.session.user.username, identifier:req.session.user.identifier}];
         const memberObjectArray = members.map(inviteToObject);
         //var result = await createGroupModel(groupName, owner, memberObjectArray);
-        const result = await axios.post(`http://localhost:8080/api/groups`,
+        const result = await axios.post(`http://localhost:8080/api/group`,
             {
                 groupname: groupName,
                 owner: owner,
@@ -116,7 +116,7 @@ async function updateGroup(req, res){
         //Update group
         try{
             //var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.session.user.username, identifier:req.session.user.identifier});
-            var result = await axios.put(`http://localhost:8080/api/groups`,
+            var result = await axios.put(`http://localhost:8080/api/group`,
                 {
                     curentgroup: currentGroupName,
                     groupname: groupName,
@@ -180,7 +180,7 @@ async function deleteGroup(req, res){
 
     //delete group
     //var result = await deleteGroupModel(groupName);
-    const result = await axios.delete(`http://localhost:8080/api/groups`,
+    const result = await axios.delete(`http://localhost:8080/api/group`,
         {
             groupname: groupName,
     });
@@ -203,7 +203,7 @@ async function leaveGroup(req, res) {
     try{
         const {body : {groupName}} = req;
         //var result = await leaveGroupModel(groupName, req.session.user.username, req.session.user.identifier);
-        const result = await axios.checkout(`http://localhost:8080/api/groups`,
+        const result = await axios.delete(`http://localhost:8080/api/groups`,
             {
                 goupname: groupName,
                 username: req.session.user.username,
@@ -216,7 +216,7 @@ async function leaveGroup(req, res) {
         
         //delete group if empty
         //await getGroupModel(groupName)
-        const groupState = (await axios.get(`http://localhost:8080/api/groups`,
+        const groupState = (await axios.get(`http://localhost:8080/api/group`,
             {
                 goupname: groupName,
                 username: req.session.user.username,
@@ -226,7 +226,7 @@ async function leaveGroup(req, res) {
         console.log("Group state:", groupState);
         if(!(groupState?.username) || !(groupState?.identifier)){
             //var result = await deleteGroupModel(groupName);
-            const result = await axios.delete(`http://localhost:8080/api/groups`,
+            const result = await axios.delete(`http://localhost:8080/api/group`,
                 {
                     goupname: groupName
             });
