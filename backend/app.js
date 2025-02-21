@@ -82,9 +82,13 @@ app.use(function(req, res, next) {
   token = req?.header('Authorization');
   if(!token) next();
 
-  req.jwt = jwt.verify(token, process.env.SESSION_SECRET);
+  try{
+    req.jwt = jwt.verify(token, process.env.SESSION_SECRET);
+  }
+  finally{
+    next();
+  }
 
-  next();
 });
 
 
