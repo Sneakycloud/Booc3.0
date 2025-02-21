@@ -9,7 +9,8 @@ const dotenv = require("dotenv").config();
 const winstoneLogger = require("./Service/winstoneLogger");
 const loggerFormatter = require("./Service/httpRequestFormatter");
 const responseInterceptor = require("./Service/responseInterceptor");
-const jwt = require('jwt-express');
+//const jwt = require('jwt-express');
+const jwt = require('jsonwebtoken');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -77,17 +78,18 @@ app.use(function(req, res, next){
 //JWT handeling
 
 //middleware that parses incoming tokens and adds them to the req as 
-/*
 app.use(function(req, res, next) {
   token = req?.header('Authorization');
   if(!token) next();
 
-  req.session = jwt.verify(token, process.env.SESSION_SECRET);
+  req.jwt = jwt.verify(token, process.env.SESSION_SECRET);
 
   next();
 });
-*/
-app.use(jwt.init(process.env.SESSION_SECRET, {cookies: false}));
+
+
+//jwt-express init
+//app.use(jwt.init(process.env.SESSION_SECRET, {cookies: false}));
 
 
 

@@ -1,7 +1,6 @@
 const usersModel = require('../Model/usersModel.js');
 const axios = require('axios');
-//const jwt = require('jsonwebtoken');
-const jwt = require('jwt-express');
+const jwt = require('jsonwebtoken');
 
 //Checks if the given credentials are a valid login.
 async function authenicate(req, res){
@@ -27,8 +26,7 @@ async function authenicate(req, res){
             const recastUser = user;
             req.jwt.user = {...recastUser, password:password};
             const {startingPage: startingPage} = recastUser;
-            token = jwt.create(process.env.SESSION_SECRET, {...recastUser, password:password});
-            //token = jwt.sign({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
+            token = jwt.sign({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
             return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage, token});
         }
     }
@@ -43,9 +41,8 @@ async function authenicate(req, res){
 //Check if user is logged in
 async function authStatus(req, res){
     try{
-        console.log("Jwt: ",req.jwt)
-        //console.log("headers: ", req.headers)
-        console.log("Token: ", req.jwt.token)
+        console.log("Jwt:",req.jwt)
+        console.log("headers: ", req.headers)
         const user = (await axios.get(`http://users-microservice/api/auth`, 
             {params: {
                 email: req.jwt.user.email,
@@ -66,8 +63,7 @@ async function authStatus(req, res){
 
 async function removeAuth(req, res) {
     try{
-        token = jwt.create(process.env.SESSION_SECRET, null);
-        //token = jwt.create(null, process.env.SESSION_SECRET, {expiresIn: '4h',});
+        token = jwt.sign(null, process.env.SESSION_SECRET, {expiresIn: '4h',});
         return res.status(200).send({msg:"Logged out", token});
     }
     catch(err){
