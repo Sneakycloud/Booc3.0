@@ -6,5 +6,13 @@ export const api = axios.create({
     withCredentials: true,
     headers:{
       "Access-Control-Allow-Credentials":"true",
+      "Authorization": authheader()
     }
   })
+
+function authheader(){
+  token = localStorage.getItem('token');
+  header = `bearer ${token}`;
+  if(!token){return null}
+  return header;
+}

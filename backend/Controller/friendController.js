@@ -22,7 +22,7 @@ async function getCurrentUser(req, res)
 async function addFriend(req, res)
 {
     const { friendsUsername, friendIdentifier } = req.body;      // the username and identifier inputted by the user
-    const currentUser = req.session.user;                        // retrieve the currently logged in user
+    const currentUser = req.jwt.user;                        // retrieve the currently logged in user
 
     //console.log('Request body:', req.body);                     //logs what data is sent
     //console.log('Currently logged in user:', currentUser);      //logs the current user
@@ -64,7 +64,7 @@ async function addFriend(req, res)
 async function deleteFriend(req, res)
 {
     const { currentUserID, friendsUsername, friendIdentifier } = req.body;
-    const currentUser = req.session.user;       
+    const currentUser = req.jwt.user;       
 
     try {
         const result = await deleteFriendModel(currentUserID, friendsUsername, friendIdentifier);

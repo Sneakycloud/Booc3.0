@@ -27,7 +27,7 @@ async function getGroup(req, res){
 //Get all groups a person is in
 async function getAllGroups(req, res){
     try{
-        var result = await getAllGroupsModel(req.session.user.username, req.session.user.identifier);
+        var result = await getAllGroupsModel(req.jwt.user.username, req.jwt.user.identifier);
         if(result === null){
             return res.status(500).send({msg:"Failed to get groups"});
         }
@@ -46,7 +46,7 @@ async function createGroup(req, res){
             console.log("There was an attempt to create a group with an empty name");
             return res.status(500).send({msg:"Failed to create group"});
         }
-        const owner = [{username:req.session.user.username, identifier:req.session.user.identifier}];
+        const owner = [{username:req.jwt.user.username, identifier:req.jwt.user.identifier}];
         const memberObjectArray = members.map(inviteToObject);
         var result = await createGroupModel(groupName, owner, memberObjectArray);
         if(result === null){
@@ -81,7 +81,7 @@ async function updateGroup(req, res){
                 console.log("There was an attempt to update a group with an empty name");
                 return res.status(500).send({msg:"Failed to update"});
             }
-            const isOwner = await checkIfOwner(currentGroupName, req.session.user.username, req.session.user.identifier);
+            const isOwner = await checkIfOwner(currentGroupName, req.jwt.user.username, req.jwt.user.identifier);
             if(!isOwner || isOwner === null || isOwner == 0){
                 return res.status(403).send({msg:"User does not have the authority to update group"});
             }
@@ -93,20 +93,20 @@ async function updateGroup(req, res){
 
         //Update group
         try{
-            var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.session.user.username, identifier:req.session.user.identifier});
+            var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.jwt.user.username, identifier:req.jwt.user.identifier});
             if(result === null){
                 return res.status(500).send({msg:"Failed to update group"});
             }
 
             //Send notification to all group members
             for(const {username, identifier} of [...result.members, members]){
-                const emitted_obj = {Type:"Update group", Cause:`${req.session.user.username}#${req.session.user.identifier}`,}
+                const emitted_obj = {Type:"Update group", Cause:`${req.jwt.user.username}#${req.jwt.user.identifier}`,}
                 await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
             }
 
             //Send notification to new owner
-            for(const {username, identifier} of [...result.owners, {username:req.session.user.username, identifier:req.session.user.identifier}]){
-                const emitted_obj = {Type:"Update group", Cause:`${req.session.user.username}#${req.session.user.identifier}`,}
+            for(const {username, identifier} of [...result.owners, {username:req.jwt.user.username, identifier:req.jwt.user.identifier}]){
+                const emitted_obj = {Type:"Update group", Cause:`${req.jwt.user.username}#${req.jwt.user.identifier}`,}
                 await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
             }
 
@@ -129,7 +129,7 @@ async function updateGroup(req, res){
 async function deleteGroup(req, res){
     const {body : {groupName}} = req
     try{
-        if((await checkIfOwner(groupName, req.session.user.username, req.session.user.identifier)) === null){
+        if((await checkIfOwner(groupName, req.jwt.user.username, req.jwt.user.identifier)) === null){
             console.log("User does not have the authority to delete group")
             return res.status(403).send({msg:"User does not have the authority to delete group"});
         }
@@ -151,7 +151,7 @@ async function deleteGroup(req, res){
 
     //Send notification to all group members
     //for(const {username, identifier} of members){
-    //    const emitted_obj = {Type:"Delete group", Cause:`${req.session.user.username}#${req.session.user.identifier}`,}
+    //    const emitted_obj = {Type:"Delete group", Cause:`${req.jwt.user.username}#${req.jwt.user.identifier}`,}
     //    await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
     //}
     sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
@@ -163,7 +163,7 @@ async function deleteGroup(req, res){
 async function leaveGroup(req, res) {
     try{
         const {body : {groupName}} = req;
-        var result = await leaveGroupModel(groupName, req.session.user.username, req.session.user.identifier);
+        var result = await leaveGroupModel(groupName, req.jwt.user.username, req.jwt.user.identifier);
         if(result === null){
             return res.status(500).send({msg:"Failed leave group"});
         }
@@ -186,7 +186,7 @@ async function leaveGroup(req, res) {
 
         //Send notification to all group members
         for(const {username, identifier} of members){
-            const emitted_obj = {Type:"Left group", Cause:`${req.session.user.username}#${ req.session.user.identifier}`,}
+            const emitted_obj = {Type:"Left group", Cause:`${req.jwt.user.username}#${ req.jwt.user.identifier}`,}
             await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
         }
             */

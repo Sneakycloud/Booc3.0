@@ -10,7 +10,7 @@ async function getCurrentUser(req, res){
 
         //Updates user session before returning it
         //uses axios to retrive data from the user microservice
-        const response = await axios.get(`users-microservice/api/users`, 
+        const response = await axios.get(`http://users-microservice/api/users`, 
             {params: {
                 username: req.session.user.username,
                 identifier: req.session.user.identifier,
@@ -35,7 +35,7 @@ async function createUser(req, res){
     try{
         const {body: {email, username, password}} = req;
         //uses axios to send data to the user microservice
-        const result = await axios.post(`users-microservice/api/users`, 
+        const result = await axios.post(`http://users-microservice/api/users`, 
             {
                 email: email,
                 username: username,
@@ -68,7 +68,7 @@ async function createUser(req, res){
 async function changeStartPage(req, res) {
     try{
         //uses axios to send data to the user microservice
-        const result = await axios.put(`users-microservice/api/users`, 
+        const result = await axios.put(`http://users-microservice/api/users`, 
             {
                 email: req.session.user.email,
                 password: req.session.user.password,
@@ -93,7 +93,7 @@ async function changeStartPage(req, res) {
 async function changePassword(req, res) {
     try{
         //uses axios to send data to the user microservice
-        const result = await axios.put(`users-microservice/api/password`, 
+        const result = await axios.put(`http://users-microservice/api/password`, 
             {
                 email: req.session.user.email,
                 password: req.session.user.password,
@@ -122,7 +122,7 @@ async function changePassword(req, res) {
 async function deleteUser(req, res) {
     try{
         //uses axios to send data to the user microservice
-        const result = await axios.delete(`users-microservice/api/users`, 
+        const result = await axios.delete(`http://users-microservice/api/users`, 
             {data: {
                 email: req.session.user.email,
                 password: req.session.user.password,

@@ -3,14 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 //import session from "express-session";
-var session = require("express-session")
 var logger = require('morgan');
 var cors = require("cors");
 const dotenv = require("dotenv").config();
-var MongoDBStore = require('connect-mongodb-session')(session);
 const winstoneLogger = require("./Service/winstoneLogger");
 const loggerFormatter = require("./Service/httpRequestFormatter");
 const responseInterceptor = require("./Service/responseInterceptor");
+const jwt = require('jsonwebtoken');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -42,52 +41,8 @@ app.io = io;
 app.options("*", cors(corsconfig))
 app.use(cors(corsconfig));
 
-//Creates mongoDB connection for session storage, https://www.npmjs.com/package/connect-mongodb-session
-var store = new MongoDBStore({
-  uri: `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@booc.oduvk.mongodb.net/Booc?retryWrites=true&w=majority&appName=Booc `,
-  databaseName: "Booc",
-  collection: 'mySessions',
-});
-
-//Catches errors with storing sessions
-store.on('error', function(error) {
-  console.log(error);
-});
 
 
-//Implements sessions
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  saveUninitialized: false, //turns off storing empty sessions
-  resave: false,
-  cookie: {
-    maxAge: 1000*60*60*24, //24 hours
-  },
-  store: store,
-}));
-
-io.engine.use(session);
-
-io.on('connection', (socket) => {
-  console.log("Connection 1");
-
-  socket.on('connect', function(socket){
-    console.log("Connection 2");
-  try{
-    const sessionId = socket.request.session.id;
-    console.log("You get ", sessionId);
-    // the session ID is used as a room
-    socket.join(sessionId);
-  }
-  catch(err){
-    console.log("Failed to establish socket connection");
-    console.log(err);
-  }
-  })
-
-  
-
-})
 
 /*
 app.use((req, res, next) => {
@@ -119,11 +74,24 @@ app.use(function(req, res, next){
 
 
 
-//IO uses shared session
-// io.use(sharedsession(session, {
-//   autoSave: true,
-// }));
+//JWT handeling
 
+//middleware that parses incoming tokens and adds them to the req as 
+/*
+app.use(function(req, res, next) {
+  token = req?.header('Authorization');
+  if(!token) next();
+
+  req.session = jwt.verify(token, process.env.SESSION_SECRET);
+
+  next();
+});
+*/
+app.use(jwt.init(process.env.SESSION_SECRET));
+
+
+
+//Routes
 app.use(responseInterceptor);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -1,5 +1,6 @@
 const usersModel = require('../Model/usersModel.js');
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 
 //Checks if the given credentials are a valid login.
 async function authenicate(req, res){
@@ -23,9 +24,10 @@ async function authenicate(req, res){
             console.log("valid credentials");
             //Updates session
             const recastUser = user;
-            req.session.user = {...recastUser, password:password};
+            req.jwt.user = {...recastUser, password:password};
             const {startingPage: startingPage} = recastUser;
-            return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage});
+            token = jwt.sign({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
+            return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage, token});
         }
     }
     catch(err){
@@ -41,12 +43,12 @@ async function authStatus(req, res){
     try{
         const user = (await axios.get(`http://users-microservice/api/auth`, 
             {params: {
-                email: req.session.user.email,
-                password: req.session.user.password,
+                email: req.jwt.user.email,
+                password: req.jwt.user.password,
         }})).data.user
 
         //console.log(user);
-        if(typeof req.session.user === "undefined"|| typeof user === "undefined" || user === "Failed to find" || user === null){
+        if(typeof req.jwt.user === "undefined"|| typeof user === "undefined" || user === "Failed to find" || user === null){
             return res.status(401).send({msg:"Not authenticated"})
         } 
         return res.status(200).send({msg:"You are authenticated"});
@@ -58,8 +60,8 @@ async function authStatus(req, res){
 
 async function removeAuth(req, res) {
     try{
-        req.session.destroy();
-        return res.status(200).send({msg:"Logged out"});
+        token = jwt.sign(null, process.env.SESSION_SECRET, {expiresIn: '4h',});
+        return res.status(200).send({msg:"Logged out", token});
     }
     catch{
         return res.status(500).send({msg:"Failed to log out"});
