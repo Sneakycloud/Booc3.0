@@ -6,6 +6,7 @@ const {getGroup:getGroupModel,
     leaveGroup:leaveGroupModel,
     checkIfOwner} =  require("../Model/groupModel");
 const { sendToSocket, getSocket } = require("../Model/io_socket");
+const jwt = require('jwt-express');
 
 
 function inviteToObject(array){

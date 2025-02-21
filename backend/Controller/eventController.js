@@ -3,7 +3,7 @@ const eventModel = require('../Model/eventModel');
 const {createEvent:createEventModel,
         deleteEventModel,
         checkIfCreator} = eventModel;
-        
+const jwt = require('jwt-express');        
 
 
 function inviteToObject(array){

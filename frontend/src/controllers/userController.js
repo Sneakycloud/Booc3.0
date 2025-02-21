@@ -14,6 +14,9 @@ export async function signUp(email, username, password){
       if(response.data?.msg !== "Created user"){
         throw Error(response.msg);
       }
+      
+      if(response.data?.token) localStorage.setItem('token', response.data?.token);
+
       redirect_target = "/Profile";
     })
     .catch(function(error){
@@ -67,6 +70,8 @@ export async function changePassword(password) {
           throw new Error("Invalid response");
         }
 
+        if(response.data?.token) localStorage.setItem('token', response.data?.token);
+
         //Test return
         return "Success";
       })
@@ -112,7 +117,11 @@ export async function getCurrentUser(){
     if(typeof response.data === "undefined" || response.data?.msg === "Failed to get user"){
       throw "Error";
     }
-    user = response.data;
+    
+    user = response.data.user;
+    if(response.data?.token) localStorage.setItem('token', response.data?.token);
+
+    
     //console.log(userNameHere.email);
   }
   catch (error) {

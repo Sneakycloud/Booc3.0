@@ -19,7 +19,7 @@ export async function login(email, password){
         }
 
         //Store token if success
-        if(response.data?.token) localStorage.setItem('token');
+        if(response.data?.token) localStorage.setItem('token', response.data?.token);
 
         //If success then redirect to next page
         if(response.data.startingPage == 0){

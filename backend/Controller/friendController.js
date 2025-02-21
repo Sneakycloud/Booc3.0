@@ -2,6 +2,7 @@ const { sendToSocket, getSocket } = require("../Model/io_socket");
 const { //getCurrentUser:getCurrentUserModel,
         addFriend:addFriendModel,
         deleteFriend:deleteFriendModel } = require("../Model/usersModel");
+const jwt = require('jwt-express');
 
 
 /* 
