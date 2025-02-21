@@ -41,6 +41,7 @@ async function authenicate(req, res){
 //Check if user is logged in
 async function authStatus(req, res){
     try{
+        console.log(req.jwt)
         const user = (await axios.get(`http://users-microservice/api/auth`, 
             {params: {
                 email: req.jwt.user.email,
@@ -53,7 +54,8 @@ async function authStatus(req, res){
         } 
         return res.status(200).send({msg:"You are authenticated"});
     }
-    catch{
+    catch(err){
+        console.log("Not authenticated error: ", err);
         return res.status(401).send({msg:"Not authenticated"})
     }
 }
@@ -63,7 +65,7 @@ async function removeAuth(req, res) {
         token = jwt.sign(null, process.env.SESSION_SECRET, {expiresIn: '4h',});
         return res.status(200).send({msg:"Logged out", token});
     }
-    catch{
+    catch(err){
         return res.status(500).send({msg:"Failed to log out"});
     }
     
