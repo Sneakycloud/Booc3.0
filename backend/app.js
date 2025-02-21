@@ -83,7 +83,9 @@ app.use(function(req, res, next) {
   if(!token) next();
 
   try{
-    req.jwt = jwt.verify(token, process.env.SESSION_SECRET);
+    decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
+    console.log("Decoded token");
+    req.jwt = decodedToken;
   }
   finally{
     next();
