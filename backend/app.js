@@ -80,16 +80,17 @@ app.use(function(req, res, next){
 //middleware that parses incoming tokens and adds them to the req as 
 app.use(function(req, res, next) {
   token = req?.header('Authorization');
-  if(!token) next();
+  if(!token | token === "Bearer ") next();
 
   try{
     decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
     console.log("Decoded token");
     req.jwt = decodedToken;
   }
-  finally{
-    next();
+  catch(err){
+    console.log(err)
   }
+  next();
 
 });
 
