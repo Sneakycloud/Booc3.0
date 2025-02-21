@@ -7,6 +7,7 @@ const {getGroup:getGroupModel,
     checkIfOwner} =  require("../model/groupModel");
 const { sendToSocket, getSocket } = require("../model/io_socket");
 
+const axios = require('axios');
 
 function inviteToObject(array){
     return {username:array[0], identifier:array[1]};
@@ -16,19 +17,30 @@ function inviteToObject(array){
 //Get info about group for recreating form
 async function getGroup(req, res){
     //Gets info
-    const groupName = req.query.groupName;
-    var result = await getGroupModel(groupName);
-    if(result === null){
+    const groupName = req.session.groupName;
+    //var result = await getGroupModel(groupName);
+    const response = await axios.get(`http://localhost:8080/api/groups`,
+        {params: {
+            groupname: groupName,
+    }});
+    if(response.data.group === null){
         return res.status(500).send({msg:"Failed to get group"});
     }
     return res.status(200).send({msg:"Got group", group:result});
+
 }
 
 //Get all groups a person is in
 async function getAllGroups(req, res){
     try{
-        var result = await getAllGroupsModel(req.session.user.username, req.session.user.identifier);
-        if(result === null){
+        //var result = await getAllGroupsModel(req.session.user.username, req.session.user.identifier);
+        const response = await axios.all(`http://localhost:8080/api/groups`,
+            {params: {
+                username: req.session.user.username,
+                identifier: req.session.user.identifier
+        }});
+        
+        if(response.data.user === null){
             return res.status(500).send({msg:"Failed to get groups"});
         }
         return res.status(200).send({msg:"Got groups", groups:result});
@@ -42,13 +54,21 @@ async function getAllGroups(req, res){
 async function createGroup(req, res){
     const {body : {groupName, members}} = req
     try{
+        
         if(!groupName || groupName == ""){
             console.log("There was an attempt to create a group with an empty name");
             return res.status(500).send({msg:"Failed to create group"});
         }
         const owner = [{username:req.session.user.username, identifier:req.session.user.identifier}];
         const memberObjectArray = members.map(inviteToObject);
-        var result = await createGroupModel(groupName, owner, memberObjectArray);
+        //var result = await createGroupModel(groupName, owner, memberObjectArray);
+        const result = await axios.post(`http://localhost:8080/api/groups`,
+            {
+                groupname: groupName,
+                owner: owner,
+                members: memberObjectArray
+        });
+        
         if(result === null){
             return res.status(500).send({msg:"Failed to create group"});
         }
@@ -58,6 +78,7 @@ async function createGroup(req, res){
             const emitted_obj = {Type:"Create group", Cause:`${owner.username}#${owner.identifier}`,}
             await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
         }
+        
         
 
         return res.status(200).send({msg:"Created group"});
@@ -82,6 +103,7 @@ async function updateGroup(req, res){
                 return res.status(500).send({msg:"Failed to update"});
             }
             const isOwner = await checkIfOwner(currentGroupName, req.session.user.username, req.session.user.identifier);
+    
             if(!isOwner || isOwner === null || isOwner == 0){
                 return res.status(403).send({msg:"User does not have the authority to update group"});
             }
@@ -93,7 +115,16 @@ async function updateGroup(req, res){
 
         //Update group
         try{
-            var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.session.user.username, identifier:req.session.user.identifier});
+            //var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.session.user.username, identifier:req.session.user.identifier});
+            var result = await axios.put(`http://localhost:8080/api/groups`,
+                {
+                    curentgroup: currentGroupName,
+                    groupname: groupName,
+                    owners: owners,
+                    members: members,
+                    username: req.session.user.username,
+                    identifier: req.session.user.identifier
+            });
             if(result === null){
                 return res.status(500).send({msg:"Failed to update group"});
             }
@@ -141,10 +172,18 @@ async function deleteGroup(req, res){
     }
     
     //Get group
-    var members = await getGroupModel(groupName).members;
+    //var members = await getGroupModel(groupName).members;
+    // const members = await axios.get(`http://localhost:8080/api/groups`,
+    //     {
+    //         groupname: groupName,
+    // });
 
     //delete group
-    var result = await deleteGroupModel(groupName);
+    //var result = await deleteGroupModel(groupName);
+    const result = await axios.delete(`http://localhost:8080/api/groups`,
+        {
+            groupname: groupName,
+    });
     if(result === null){
         return res.status(500).send({msg:"Failed to delete group"});
     }
@@ -163,16 +202,34 @@ async function deleteGroup(req, res){
 async function leaveGroup(req, res) {
     try{
         const {body : {groupName}} = req;
-        var result = await leaveGroupModel(groupName, req.session.user.username, req.session.user.identifier);
+        //var result = await leaveGroupModel(groupName, req.session.user.username, req.session.user.identifier);
+        const result = await axios.checkout(`http://localhost:8080/api/groups`,
+            {
+                goupname: groupName,
+                username: req.session.user.username,
+                identifier: req.session.user.identifier
+
+        });
         if(result === null){
             return res.status(500).send({msg:"Failed leave group"});
         }
         
         //delete group if empty
-        const groupState = (await getGroupModel(groupName))?.owners[0];
+        //await getGroupModel(groupName)
+        const groupState = (await axios.get(`http://localhost:8080/api/groups`,
+            {
+                goupname: groupName,
+                username: req.session.user.username,
+                identifier: req.session.user.identifier
+
+        }))?.owners[0];
         console.log("Group state:", groupState);
         if(!(groupState?.username) || !(groupState?.identifier)){
-            var result = await deleteGroupModel(groupName);
+            //var result = await deleteGroupModel(groupName);
+            const result = await axios.delete(`http://localhost:8080/api/groups`,
+                {
+                    goupname: groupName
+            });
             if(result === null){
                 sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
                 return res.status(200).send({msg:"Left group"});
