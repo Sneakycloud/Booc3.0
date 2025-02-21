@@ -15,7 +15,7 @@ const { sendToSocket, getSocket } = require("../Model/io_socket");
 async function createEvent(req, res){
 
     const { body: { title, date, fromTime, toTime, location, description, color, repeat, visibility, invitePeople } } = req;
-    const createdBy = req.jwt.user;
+    const createdBy = req.jwt.payload;
     const mappedInvite = invitePeople.map(inviteToObject); //Transforms the [[]] to [{}]
 
     const result = await createEventModel(title, date, fromTime, toTime, location, description, color, repeat, visibility, mappedInvite, createdBy);
@@ -24,7 +24,7 @@ async function createEvent(req, res){
     {
         //Send notification to all group members
         for(const {username, identifier} of invitePeople){
-            const emitted_obj = {Type:"Create group", Cause:`${req.jwt.user.username}#${req.jwt.user.identifier}`,}
+            const emitted_obj = {Type:"Create group", Cause:`${req.jwt.payload.username}#${req.jwt.payload.identifier}`,}
             await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
         }
         return res.status(201).send({result});                          // 201 Created
@@ -46,7 +46,7 @@ async function deleteEvent(req, res) {
     //check if the user is the creator of the event
     try {
 
-        const isEventCreator = await checkIfCreator(_id, req.jwt.user.username, req.jwt.user.identifier);
+        const isEventCreator = await checkIfCreator(_id, req.jwt.payload.username, req.jwt.payload.identifier);
 
         console.log("Event creator:", isEventCreator);
 
@@ -81,8 +81,8 @@ async function deleteEvent(req, res) {
 // Get users events
 async function getEvents(req, res){
     try{
-        var uName = req.jwt.user.username;
-        var uId = req.jwt.user.identifier;
+        var uName = req.jwt.payload.username;
+        var uId = req.jwt.payload.identifier;
 
         var result = await eventModel.getEvents(uName, uId);
         //console.log(`I controller så ser result ut såhär`, result);
