@@ -16,7 +16,7 @@ async function getCurrentUser(req, res){
                 identifier: req.jwt.payload.identifier,
         }});
         if(response.data.user == "" || response.data.msg == "Failed to get current user") res.status(500).send({msg:"Failed to get current user"});
-        const refreshed_user = {id:req.session.id, ...response.data.user, password:req.jwt.payload.password, socket:req.session.socket};
+        const refreshed_user = {id:req.jwt.payload._id, ...response.data.user, password:req.jwt.payload.password, socket:req.jwt.payload?.socket};
         const token = (jwt.create(process.env.SESSION_SECRET, refreshed_user)).token;
 
         //Returns user session
@@ -51,7 +51,7 @@ async function createUser(req, res){
         }
         //console.log(result);
         if(typeof result.data.user !== "undefined"){
-            const new_user = {id:req.session.id, ...result.data.user, password:password, socket:req.session.socket};
+            const new_user = {id:req.jwt.payload._id, ...result.data.user, password:password, socket:req.jwt.payload?.socket};
             const token = (jwt.create(process.env.SESSION_SECRET, {something})).token;
             return res.status(200).send({msg:"Created user", token});
         }

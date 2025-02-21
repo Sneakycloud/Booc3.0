@@ -11,6 +11,7 @@ export async function AuthLoader(){
         return redirect("/");
     }
     //Get user
+    console.log("tried?");
     const user = await getCurrentUser();
     if(user === "Failed to get user"){
         return null;
