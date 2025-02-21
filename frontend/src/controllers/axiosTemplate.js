@@ -2,7 +2,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 export const api = axios.create({
-    baseURL: "http://132.164.68.41:80/",
+    baseURL: "http://10.224.0.6:6400/",
     withCredentials: true,
     headers:{
       "Access-Control-Allow-Credentials":"true",
@@ -11,8 +11,8 @@ export const api = axios.create({
   })
 
 function authheader(){
-  token = localStorage.getItem('token');
-  header = `bearer ${token}`;
+  const token = localStorage.getItem('token');
+  const header = `bearer ${token}`;
   if(!token){return null}
   return header;
 }
