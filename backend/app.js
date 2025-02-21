@@ -87,7 +87,7 @@ app.use(function(req, res, next) {
   next();
 });
 */
-app.use(jwt.init(process.env.SESSION_SECRET));
+app.use(jwt.init(process.env.SESSION_SECRET, {cookies: false}));
 
 
 
