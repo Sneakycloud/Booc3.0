@@ -9,7 +9,7 @@ const dotenv = require("dotenv").config();
 const winstoneLogger = require("./Service/winstoneLogger");
 const loggerFormatter = require("./Service/httpRequestFormatter");
 const responseInterceptor = require("./Service/responseInterceptor");
-const jwt = require('express-jwt');
+const jwt = require('jwt-express');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
