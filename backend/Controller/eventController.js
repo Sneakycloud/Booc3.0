@@ -108,123 +108,32 @@ async function deleteEvent(req, res) {
     return res.status(200).send({msg:"Event Deleted"});              // 200 OK
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Get users events
-//async function getEvents(req, res){
-//    try{
-//        var uName = req.session.user.username;
-//        var uId = req.session.user.identifier;
-//
-//        // var result = await eventModel.getEvents(uName, uId);
-//
-//        //uses axios to retrive data from the user microservice
-//        var result = await axios.get(`http://localhost:5000/api/events`, 
-//            {params: {
-//                username: uName,
-//                identifier: uId,
-//        }});
-//
-//        //console.log(`I controller så ser result ut såhär`, result);
-//        if (result === null) {
-//            console.log("Failed to get events");
-//            return res.status(500).send({msg:"Failed to get events"});
-//        }
-//        return res.status(200).send({msg:"Got group", group:result});
-//    }
-//    catch(err){
-//        console.log("Failed to get events");
-//        console.log(err);
-//        return res.status(500).send({msg:"Failed to get events"});
-//    }
-//    
-//}
-
 async function getEvents(req, res) {
     try {
-        // Log incoming request parameters
-        const { username, identifier } = req.query;
-        console.log("Received request for events with:", req.query);
-
-        // Check if the required query parameters are present
-        if (!username || !identifier) {
-            console.error("Missing required query parameters.");
-            return res.status(400).json({ msg: "Bad Request: Missing username or identifier" });
+        if (!req.session || !req.session.user) {
+            return res.status(401).send({ msg: "Unauthorized: No session found" });
         }
 
-        // Simulate event fetching from the database (replace this with actual database logic)
-        const events = await eventModel.getEvents(username, identifier);
-        console.log("Database response:", events);  // Log the events retrieved from the DB
+        var uName = req.session.user.username;
+        var uId = req.session.user.identifier;
 
-        // If no events are found, return a 404
-        if (!events || events.length === 0) {
-            console.warn("No events found for user:", username);
-            return res.status(404).json({ msg: "No events found" });
+        //console.log(`Fetching events for: ${uName}, ${uId}`);
+
+        const result = await axios.get("http://localhost:5000/api/events", {
+            params: { username: uName, identifier: uId },
+        });
+
+        if (!result || result.status !== 200) {
+            console.log("Failed to get events, bad response");
+            return res.status(500).send({ msg: "Failed to get events" });
         }
 
-        // Send the response with the events
-        return res.status(200).json(events);
+        return res.status(200).send({ msg: "Got group", group: result.data });
     } catch (err) {
-        // Log the error if something fails
-        console.error("Error fetching events:", err);
-        return res.status(500).json({ msg: "Internal Server Error", error: err.message });
+        console.error("Failed to get events:", err.response ? err.response.data : err);
+        return res.status(500).send({ msg: "Failed to get events", error: err.toString() });
     }
 }
-
-module.exports = {
-    getEvents
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = {
     createEvent,

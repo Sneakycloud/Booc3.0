@@ -54,47 +54,11 @@ async function deleteEvent(req, res) {
     return res.status(200).send({msg:"Event Deleted"});              // 200 OK
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//// Get users events
-//async function getEvents(req, res){
-//    try{
-//        var uName = req.session.user.username;
-//        var uId = req.session.user.identifier;
-//
-//        var result = await eventModel.getEvents(uName, uId);
-//        return res.status(200).send({msg:"Got group", group:result});
-//    }
-//    catch{
-//        return res.status(500).send({msg:"Failed to get events"});
-//    }
-//    
-//}
-
 async function getEvents(req, res) {
     try {
         // Log incoming request parameters
         const { username, identifier } = req.query;
-        console.log("Received request for events with:", req.query);
+        //console.log("Received request for events with:", req.query);
 
         // Check if the required query parameters are present
         if (!username || !identifier) {
@@ -104,7 +68,7 @@ async function getEvents(req, res) {
 
         // Simulate event fetching from the database (replace this with actual database logic)
         const events = await eventModel.getEvents(username, identifier);
-        console.log("Database response:", events);  // Log the events retrieved from the DB
+        //console.log("Database response:", events);  // Log the events retrieved from the DB
 
         // If no events are found, return a 404
         if (!events || events.length === 0) {
@@ -120,29 +84,6 @@ async function getEvents(req, res) {
         return res.status(500).json({ msg: "Internal Server Error", error: err.message });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = {
     createEvent,
