@@ -1,6 +1,7 @@
 const usersModel = require('../Model/usersModel.js');
 const axios = require('axios');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
+const jwt = require('jwt-express');
 
 //Checks if the given credentials are a valid login.
 async function authenicate(req, res){
@@ -26,7 +27,7 @@ async function authenicate(req, res){
             const recastUser = user;
             req.jwt.user = {...recastUser, password:password};
             const {startingPage: startingPage} = recastUser;
-            token = jwt.sign({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
+            token = jwt.create({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
             return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage, token});
         }
     }
@@ -63,7 +64,7 @@ async function authStatus(req, res){
 
 async function removeAuth(req, res) {
     try{
-        token = jwt.sign(null, process.env.SESSION_SECRET, {expiresIn: '4h',});
+        token = jwt.create(null, process.env.SESSION_SECRET, {expiresIn: '4h',});
         return res.status(200).send({msg:"Logged out", token});
     }
     catch(err){
