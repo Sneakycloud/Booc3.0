@@ -49,7 +49,7 @@ async function authStatus(req, res){
         }})).data.user
 
         //console.log(user);
-        if(typeof req.jwt.payload === "undefined"|| typeof user === "undefined" || user === "Failed to find" || user === null){
+        if(typeof user === "undefined" || user === "Failed to find" || user === null){
             return res.status(401).send({msg:"Not authenticated"})
         } 
         return res.status(200).send({msg:"You are authenticated"});
@@ -63,10 +63,10 @@ async function authStatus(req, res){
 async function removeAuth(req, res) {
     try{
         //token = jwt.sign(null, process.env.SESSION_SECRET, {expiresIn: '4h',});
-        const token = (jwt.create(process.env.SESSION_SECRET, null)).token;
-        return res.status(200).send({msg:"Logged out", token});
+        return res.status(200).send({msg:"Logged out", token:null});
     }
     catch(err){
+        console.log(err);
         return res.status(500).send({msg:"Failed to log out"});
     }
     
