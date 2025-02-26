@@ -61,6 +61,7 @@ export async function isAuth(){
 }
 
 export async function logOut() {
+  /*
     return await api.delete("/api/auth", {
     })
     .then(function(response){
@@ -80,4 +81,6 @@ export async function logOut() {
       console.log(error);
       return 0;
     })
+      */
+    localStorage.removeItem('token', response.data?.token);
 }
