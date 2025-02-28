@@ -54,7 +54,7 @@ Setup project:
     - ^get the APP_NAME from above
 2. Replace {APP_NAME} with the result from above, if unchanged use BoocApp
 4. Log in to azure cli
-5. Place the following in github secrets as
+5. Place the following in github secrets as (if you already have set up this once then only CONTAINER_REGISTRY_PASSWORD needs to be updated)
     - Secret name = result of running command in cmd
     - CONTAINER_REGISTRY_LOGIN_SERVER = az acr show -n {APP_NAME} --query loginServer -o tsv
     - CONTAINER_REGISTRY_USERNAME = az acr credential show -n {APP_NAME} --query username -o tsv
@@ -68,6 +68,7 @@ Setup project:
     - base64 encode the config (for ex using: https://www.di-mgt.com.au/base64-for-windows.html)
     - KUBE_CONFIG = (content of base64 encoded config file)
 7. Anywhere
+    - Run all github workflows
     - kubectl get service backend
     - ^place external ip from above in frontend axios template and replace the destination with "https://{external_ip}/"
     - ^Later this will instead be the ip which you use to connect to the website in a browser
