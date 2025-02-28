@@ -71,7 +71,7 @@ Setup project:
 8. Anywhere
     - Run all github workflows
     - kubectl get service backend
-    - ^place external ip from above in frontend axios template and replace the destination with "https://{external_ip}/"
+    - ^place external ip from above in frontend axios template and replace the destination with "http://{external_ip}:80/"
     - ^Later this will instead be the ip which you use to connect to the website in a browser
 
 When the above has been done at least once then starting the workflows will restart that service with the new github commit.
