@@ -67,7 +67,8 @@ Setup project:
     - ```az aks get-credentials --name BoocApp --resource-group BoocApp```
     - Make copy of config and name it config.bak
     - base64 encode the config (for ex using: https://www.di-mgt.com.au/base64-for-windows.html)
-    - KUBE_CONFIG = (content of base64 encoded config file)
+    - Add the following to github secrets
+        - KUBE_CONFIG = (content of base64 encoded config file)
 8. Anywhere
     - Run all github workflows
     - kubectl get service backend
