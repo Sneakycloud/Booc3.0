@@ -54,7 +54,8 @@ Setup project:
     - ^get the APP_NAME from above
 2. Replace {APP_NAME} with the result from above, if unchanged use BoocApp
 4. Log in to azure cli
-5. Place the following in github secrets as (if you already have set up this once then only CONTAINER_REGISTRY_PASSWORD needs to be updated)
+5. Place the following in github secrets as
+    - If you already have set up this once then only CONTAINER_REGISTRY_PASSWORD needs to be updated
     - Secret name = result of running command in cmd
     - CONTAINER_REGISTRY_LOGIN_SERVER = az acr show -n {APP_NAME} --query loginServer -o tsv
     - CONTAINER_REGISTRY_USERNAME = az acr credential show -n {APP_NAME} --query username -o tsv
@@ -62,12 +63,12 @@ Setup project:
     - DB_USERNAME = username for a acount to mongodb uri
     - DB_PASSWORD = a password for a account to a mongodb uri
     - SESSION_SECRET = a secret to be used (write whatever you want here)
-6. In your kubectl folder, do following:
+7. In your kubectl folder, do following:
     - ```az aks get-credentials --name BoocApp --resource-group BoocApp```
     - Make copy of config and name it config.bak
     - base64 encode the config (for ex using: https://www.di-mgt.com.au/base64-for-windows.html)
     - KUBE_CONFIG = (content of base64 encoded config file)
-7. Anywhere
+8. Anywhere
     - Run all github workflows
     - kubectl get service backend
     - ^place external ip from above in frontend axios template and replace the destination with "https://{external_ip}/"
