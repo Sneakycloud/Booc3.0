@@ -37,10 +37,9 @@ io = new Server(server,{
 
 app.io = io;
 
+app.use(cors()); //app.use(cors(corsconfig));
+app.options("*", cors());
 
-
-app.options("*", cors(corsconfig))
-app.use(cors(corsconfig));
 
 
 
