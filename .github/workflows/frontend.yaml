@@ -56,7 +56,7 @@ jobs:
       - name: Publish
         run: |
           echo $CONTAINER_REGISTRY_PASSWORD | docker login $CONTAINER_REGISTRY_LOGIN_SERVER --username $CONTAINER_REGISTRY_USERNAME --password-stdin
-          docker push $CONTAINER_REGISTRY_LOGIN_SERVER/backend:$VERSION
+          docker push $CONTAINER_REGISTRY_LOGIN_SERVER/frontend:$VERSION
 
       # Installs Kubectl and connects it to the Azure Kubernetes Service (AKS) cluster.
       # https://github.com/marketplace/actions/kubernetes-cli-kubectl
