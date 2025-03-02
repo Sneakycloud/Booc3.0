@@ -18,7 +18,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: PORT
-          value: "6400" # Mabye change
+          value: "3000" # Mabye change
         - name: DB_USERNAME
           value: $DB_USERNAME
         - name: DB_PASSWORD
@@ -44,4 +44,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 6400 # Mabye change
+      targetPort: 3000 # Mabye change
