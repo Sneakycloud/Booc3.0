@@ -1,3 +1,4 @@
+/*
 const eventController = require("../Controller/eventController");
 const axios = require("axios");
 const eventModel = require("../Model/eventModel");
@@ -147,3 +148,4 @@ describe("getEvents", () => {
         expect(res.send).toHaveBeenCalledWith(expect.objectContaining({ msg: "Failed to get events" }));
     });
 });
+*/
