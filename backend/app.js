@@ -46,8 +46,8 @@ app.use((req, res, next) => {
 });
 */
 
-app.use(cors()); //app.use(cors(corsconfig));
-app.options("*", cors());
+//app.use(cors()); //app.use(cors(corsconfig));
+//app.options("*", cors());
 
 
 

@@ -9,7 +9,7 @@ export async function login(email, password){
         password: password,
       },{
         headers:{
-          "Access-Control-Allow-Credentials":"true",
+          //"Access-Control-Allow-Credentials":"true",
         }
       })
       .then(function(response){
