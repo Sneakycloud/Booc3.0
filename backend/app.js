@@ -37,6 +37,14 @@ io = new Server(server,{
 
 app.io = io;
 
+
+app.use((req, res, next) => {
+  console.log("got request")
+  //return res.send({msg:"server recived message"});
+  next();
+});
+
+
 app.use(cors()); //app.use(cors(corsconfig));
 app.options("*", cors());
 
