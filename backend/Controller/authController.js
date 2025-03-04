@@ -1,14 +1,14 @@
-const usersModel = require('../Model/usersModel.js');
-const axios = require('axios');
 //const jwt = require('jsonwebtoken');
 const jwt = require('jwt-express');
+
+const {usersMsApi} = require("../AxiosTemplate/AxiosUserMs");
 
 //Checks if the given credentials are a valid login.
 async function authenicate(req, res){
     try{
         //Extract parameters from req
         const {body: {email, password}} = req;
-        const response = await axios.get(`http://users-microservice/api/auth`, 
+        const response = await usersMsApi().get(`/api/auth`, 
             {params: {
                 email: email,
                 password: password,
@@ -42,7 +42,7 @@ async function authenicate(req, res){
 //Check if user is logged in
 async function authStatus(req, res){
     try{
-        const user = (await axios.get(`http://users-microservice/api/auth`, 
+        const user = (await usersMsApi().get(`/api/auth`, 
             {params: {
                 email: req.jwt.payload.email,
                 password: req.jwt.payload.password,
