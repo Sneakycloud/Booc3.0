@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = () => {
-  if(process.env?.Prod == true || process.env?.Prod == "true"){
+  if(process.env?.PROD == true || process.env?.PROD == "true"){
     return axios.create({
       baseURL: "http://backend",
       //withCredentials: true,
