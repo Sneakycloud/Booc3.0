@@ -52,15 +52,15 @@ async function createUser(req, res){
         //console.log(result);
         if(typeof result.data.user !== "undefined"){
             const new_user = {id:req.jwt.payload._id, ...result.data.user, password:password, socket:req.jwt.payload?.socket};
-            const token = (jwt.create(process.env.SESSION_SECRET, {something})).token;
+            const token = (jwt.create(process.env.SESSION_SECRET, new_user)).token;
             return res.status(200).send({msg:"Created user", token});
         }
         else{
             return res.status(500).send({msg:"Failed to create user"});
         }
     }
-    catch{
-        console.log("Failed to create user because of err");
+    catch(err){
+        console.log("Failed to create user because of err",err);
         return res.status(500).send({msg:"Failed to create user"});
     }
 
@@ -132,7 +132,7 @@ async function deleteUser(req, res) {
             }},   
         );
 
-        console.log(result);
+        //console.log(result);
         if(result.data?.result){
             return res.status(200).send({msg:"Deleted user"});
         }

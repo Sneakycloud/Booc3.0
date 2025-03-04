@@ -28,7 +28,7 @@ async function authenicate(req, res){
             const {startingPage: startingPage} = recastUser;
             const token = (jwt.create(process.env.SESSION_SECRET, {...recastUser, password:password})).token;
             //token = jwt.sign({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
-            return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage, token});
+            return res.status(200).send({msg: "Valid credentials", startingPage:startingPage, token});
         }
     }
     catch(err){

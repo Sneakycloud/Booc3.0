@@ -66,9 +66,9 @@ async function changePassword(req, res) {
 
 async function deleteUser(req, res) {
     const {email, password} = req.body;
-    console.log("Email: ", email);
-    console.log("Password. ", password);
-    console.log(req);
+    //console.log("Email: ", email);
+    //console.log("Password. ", password);
+    //console.log(req);
     const result = await usersModel.deleteUser(email, password);
     return res.status(200).send({result:result});
 }

@@ -64,7 +64,7 @@ describe("authenticate", () => {
         
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.send).toHaveBeenCalledWith(
-            expect.objectContaining( {msg: "Valid crendentials"} )
+            expect.objectContaining( {msg: "Valid credentials"} )
         );
     });
 
