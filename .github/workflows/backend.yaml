@@ -29,6 +29,7 @@ jobs:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      Prod: ${{ secrets.Prod }}
 
     steps:
 

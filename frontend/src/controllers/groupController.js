@@ -4,7 +4,7 @@ import {api} from "./axiosTemplate.js"
 //Get info about group for recreating form
 export async function getGroup(groupName){
     var ProccesedResponse = "";
-    await api.get('/api/group', {
+    await api().get('/api/group', {
           params: {
             groupName:groupName,
           }
@@ -35,7 +35,7 @@ export async function getGroup(groupName){
 //Will return array of groups that the user is in
 export async function getAllGroups(){
     var ProccesedResponse = "";
-    await api.get('/api/groups', {
+    await api().get('/api/groups', {
         },{
           headers:{
             "Access-Control-Allow-Origin": "http://localhost:6400",
@@ -62,7 +62,7 @@ export async function getAllGroups(){
 //Create group
 export async function createGroup(groupName, members){
     var ProccesedResponse = "";
-    await api.post('/api/group', {
+    await api().post('/api/group', {
           groupName:groupName,
           members:members,
         },{
@@ -91,7 +91,7 @@ export async function createGroup(groupName, members){
 //Update group
 export async function updateGroup(currentGroupName, groupName,owners,members){
     var ProccesedResponse = "";
-    await api.put('/api/group', {
+    await api().put('/api/group', {
             currentGroupName:currentGroupName,
             groupName:groupName,
             owners:owners,
@@ -122,7 +122,7 @@ export async function updateGroup(currentGroupName, groupName,owners,members){
 //Delete group
 export async function deleteGroup(groupName){
     var ProccesedResponse = "";
-    await api.delete('/api/group', 
+    await api().delete('/api/group', 
         {
         headers:{
           "Access-Control-Allow-Origin": "http://localhost:6400",
@@ -152,7 +152,7 @@ export async function deleteGroup(groupName){
 //Leave group
 export async function leaveGroup(groupName){
   var ProccesedResponse = "";
-  await api.delete('/api/groups', 
+  await api().delete('/api/groups', 
       {
       headers:{
         "Access-Control-Allow-Origin": "http://localhost:6400",
