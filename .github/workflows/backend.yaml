@@ -28,7 +28,7 @@ jobs:
       CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      PRODUCTION_ENV: ${{ secrets.PRODUCTION_ENV }}
+      PRODUCTION_ENV: true
       SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
       
       
