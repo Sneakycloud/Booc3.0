@@ -12,6 +12,8 @@ async function started(req,res) {
 //Checks that all microservices are ready
 async function ready(req,res) {
     //Users microservice
+    console.log("Production:", process.env.PROD);
+    
     const usersStatus = (await axios.get(`http://users-microservice/health/ready`)).status;
 
     //
