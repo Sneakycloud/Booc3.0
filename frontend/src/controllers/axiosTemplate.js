@@ -6,7 +6,7 @@ export const api = () => {
       baseURL: "http://backend",
       //withCredentials: true,
       headers:{
-        "Access-Control-Allow-Credentials":"true",
+        //"Access-Control-Allow-Credentials":"true",
         "Authorization": authheader()
       }
     })
@@ -16,7 +16,7 @@ export const api = () => {
       baseURL: "http://localhost:6400",
       //withCredentials: true,
       headers:{
-        "Access-Control-Allow-Credentials":"true",
+        //"Access-Control-Allow-Credentials":"true",
         "Authorization": authheader()
       }
     })

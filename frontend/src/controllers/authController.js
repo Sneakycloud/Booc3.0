@@ -7,10 +7,6 @@ export async function login(email, password){
   const response =  await api().post('/api/auth', {
         email:email,
         password: password,
-      },{
-        headers:{
-          "Access-Control-Allow-Credentials":"true",
-        }
       })
       .then(function(response){
         //Test for failed login
