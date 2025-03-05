@@ -1,4 +1,5 @@
 const axios = require('axios');
+const dotenv = require("dotenv").config();
 
 //Startup
 //just checks that express is working
