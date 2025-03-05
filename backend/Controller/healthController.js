@@ -12,7 +12,7 @@ async function started(req,res) {
 //Checks that all microservices are ready
 async function ready(req,res) {
     //Users microservice
-    console.log("Production:", process.env.PROD);
+    console.log("Env vars:", process.env);
 
     var usersStatus;
     try{

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const api = () => {
   console.log("PROD is", process.env?.REACT_APP_PROD);
-  if(process.env?.REACT_APP_PROD == true || process.env?.REACT_APP_PROD == "true"){
+  if(process.env.REACT_APP_PROD == true || process.env.REACT_APP_PROD == "true"){
     return axios.create({
       baseURL: "http://74.178.165.24",
       //withCredentials: true,
