@@ -29,7 +29,7 @@ jobs:
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-      PRODUCTION_ENV: ${{ secrets.PROD }}
+      PRODUCTION_ENV: ${{ secrets.PRODUCTION }}
 
     steps:
 
