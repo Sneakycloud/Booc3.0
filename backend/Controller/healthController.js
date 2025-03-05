@@ -13,8 +13,20 @@ async function started(req,res) {
 async function ready(req,res) {
     //Users microservice
     console.log("Production:", process.env.PROD);
+
+    try{
+        const usersStatus = (await axios.get(`http://users-microservice/health/ready`)).status;
+    }
+    catch(error){
+        if (error.response){
+            console.log("Error response: ", error.response);
+        }else if(error.request){
+            console.log("Error request: ", error.request);
+        }else if(error.message){
+            console.log("Error message: ", error.message);
+        }
+    }
     
-    const usersStatus = (await axios.get(`http://users-microservice/health/ready`)).status;
 
     //
 
