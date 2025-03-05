@@ -116,6 +116,10 @@ app.use(jwt.init(process.env.SESSION_SECRET, {cookies: false}));
 
 //Routes
 app.use(responseInterceptor);
+
+//Health route for probing
+app.use(cors());
+app.options("*", cors());
 app.use("/health", healthRouter);
 
 //Cors for the rest of the routes
