@@ -53,7 +53,7 @@ jobs:
       - name: Test
         run: |
           npm ci
-      #    npm test
+          npm test
 
       # Builds the Docker image.
       - name: Build
