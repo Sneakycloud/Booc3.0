@@ -4,7 +4,8 @@ const dotenv = require("dotenv").config();
 
 const usersMsApi = () => {
   var AxiosApi;
-
+  //console.log("Env vars:", process.env);
+  //console.log("Production:", process.env.PRODUCTION_ENV);
 
   //--------------------------------------
   return axios.create({baseURL:`http://users-microservice`});

@@ -5,7 +5,7 @@ export const api = () => {
   
   //-------------------------------------------------------
   return axios.create({
-    baseURL: "http://74.178.165.24:80",
+    baseURL: "http://50.85.162.88:80",
     //withCredentials: true,
     headers:{
       //"Access-Control-Allow-Credentials":"true",
