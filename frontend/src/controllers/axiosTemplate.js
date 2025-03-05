@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = () => {
-  if(process.env?.PROD == true || process.env?.PROD == "true"){
+  if(process.env?.REACT_APP_PROD == true || process.env?.REACT_APP_PROD == "true"){
     return axios.create({
       baseURL: "http://74.178.165.24",
       //withCredentials: true,
