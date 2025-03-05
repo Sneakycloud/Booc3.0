@@ -1,14 +1,14 @@
-const usersModel = require('../Model/usersModel.js');
-const axios = require('axios');
 //const jwt = require('jsonwebtoken');
 const jwt = require('jwt-express');
+
+const {usersMsApi} = require("../AxiosTemplate/AxiosUserMs");
 
 //Checks if the given credentials are a valid login.
 async function authenicate(req, res){
     try{
         //Extract parameters from req
         const {body: {email, password}} = req;
-        const response = await axios.get(`http://users-microservice/api/auth`, 
+        const response = await usersMsApi().get(`/api/auth`, 
             {params: {
                 email: email,
                 password: password,
@@ -28,7 +28,7 @@ async function authenicate(req, res){
             const {startingPage: startingPage} = recastUser;
             const token = (jwt.create(process.env.SESSION_SECRET, {...recastUser, password:password})).token;
             //token = jwt.sign({...recastUser, password:password}, process.env.SESSION_SECRET, {expiresIn: '4h',});
-            return res.status(200).send({msg: "Valid crendentials", startingPage:startingPage, token});
+            return res.status(200).send({msg: "Valid credentials", startingPage:startingPage, token});
         }
     }
     catch(err){
@@ -42,7 +42,7 @@ async function authenicate(req, res){
 //Check if user is logged in
 async function authStatus(req, res){
     try{
-        const user = (await axios.get(`http://users-microservice/api/auth`, 
+        const user = (await usersMsApi().get(`/api/auth`, 
             {params: {
                 email: req.jwt.payload.email,
                 password: req.jwt.payload.password,

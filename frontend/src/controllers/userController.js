@@ -4,7 +4,7 @@ import {api} from "./axiosTemplate.js"
 //Creates a new account and logs you in
 export async function signUp(email, username, password){
   var redirect_target = "";
-  const response = await api.post('/api/users', {
+  const response = await api().post('/api/users', {
       email:email,
       username: username,
       password: password,
@@ -28,13 +28,8 @@ export async function signUp(email, username, password){
 
 export async function changeStartPage(startPage){
   var ProccesedResponse = "";
-  await api.put('/api/users', {
+  await api().put('/api/users', {
         startPage:startPage,
-      },{
-        headers:{
-          "Access-Control-Allow-Origin": "http://localhost:6400",
-          "Access-Control-Allow-Credentials":"true",
-        }
       })
       .then(function(response){
         //Test for failed login
@@ -56,13 +51,8 @@ export async function changeStartPage(startPage){
 
 export async function changePassword(password) {
   var ProccesedResponse = "";
-  await api.put('/api/password', {
+  await api().put('/api/password', {
         password:password,
-      },{
-        headers:{
-          "Access-Control-Allow-Origin": "http://localhost:6400",
-          "Access-Control-Allow-Credentials":"true",
-        }
       })
       .then(function(response){
         //Test for failed login
@@ -86,12 +76,7 @@ export async function changePassword(password) {
 //Deletes the currently logged in user
 export async function deleteUser() {
   var ProccesedResponse = "";
-  await api.delete('/api/users',{
-        headers:{
-          "Access-Control-Allow-Origin": "http://localhost:6400",
-          "Access-Control-Allow-Credentials":"true",
-        }
-      })
+  await api().delete('/api/users')
       .then(function(response){
         //Test for failed login
         if(typeof response.data?.msg === "undefined" || response.data?.msg === "Failed to delete user"){
@@ -113,7 +98,7 @@ export async function getCurrentUser(){
   var user;
 
   try {
-    const response = await api.get('/api/users', user);
+    const response = await api().get('/api/users', user);
     if(typeof response.data === "undefined" || response.data?.msg === "Failed to get user"){
       throw "Error";
     }

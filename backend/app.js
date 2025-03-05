@@ -15,6 +15,7 @@ const jwt = require('jwt-express');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var apiRouter = require("./routes/api");
+var healthRouter = require("./routes/health");
 
 var app = express();
 //Creates socket connection server
@@ -38,9 +39,17 @@ io = new Server(server,{
 app.io = io;
 
 
+/*
+app.use((req, res, next) => {
+  console.log("got request")
+  //return res.send({msg:"server recived message"});
+  next();
+});
+*/
 
-app.options("*", cors(corsconfig))
-app.use(cors(corsconfig));
+app.use(cors()); //app.use(cors(corsconfig));
+app.options("*", cors());
+
 
 
 
@@ -106,6 +115,7 @@ app.use(responseInterceptor);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/api", apiRouter);
+app.use("/health", healthRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

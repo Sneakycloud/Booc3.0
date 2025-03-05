@@ -1,14 +1,34 @@
 import axios from 'axios';
-axios.defaults.withCredentials = true;
 
-export const api = axios.create({
-    baseURL: "http://backend:80/",
-    withCredentials: true,
-    headers:{
-      "Access-Control-Allow-Credentials":"true",
-      "Authorization": authheader()
-    }
-  })
+export const api = () => {
+  if(process.env?.PROD == true || process.env?.PROD == "true"){
+    return axios.create({
+      baseURL: "http://74.178.165.24",
+      //withCredentials: true,
+      headers:{
+        //"Access-Control-Allow-Credentials":"true",
+        "Authorization": authheader()
+      }
+    })
+  }
+  else{
+    return axios.create({
+      baseURL: "http://localhost:6400",
+      //withCredentials: true,
+      headers:{
+        //"Access-Control-Allow-Credentials":"true",
+        "Authorization": authheader()
+      }
+    })
+  }
+
+
+}
+
+
+
+
+
 
 function authheader(){
   const token = localStorage.getItem('token');

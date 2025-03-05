@@ -1,5 +1,6 @@
 const auth = require("../Controller/authController");
-const axios = require('axios');
+const mockAxios = require('axios');
+const {usersMsApi} = require("../AxiosTemplate/AxiosUserMs");
 //const jwt = require('jwt-express');
 require('dotenv').config({ path: require('find-config')('.env') })
 
@@ -50,7 +51,7 @@ describe("authenticate", () => {
 
     //Successful test
     test('succesful user authentication', async () => {
-        axios.get.mockResolvedValue({
+        mockAxios.get.mockResolvedValue({
             data: {
                 user: TestUser
             }
@@ -63,13 +64,13 @@ describe("authenticate", () => {
         
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.send).toHaveBeenCalledWith(
-            expect.objectContaining( {msg: "Valid crendentials"} )
+            expect.objectContaining( {msg: "Valid credentials"} )
         );
     });
 
     //test which fails (due to the axios resolving to a failed lockup in the database)
     test('failed user authentication', async () => {
-        axios.get.mockResolvedValue();
+        mockAxios.get.mockResolvedValue();
 
         //Simulates input request, this will not matter however as test user decides the output
         const req = mockRequestAuth("Test@ju.se", "test123");
@@ -84,7 +85,7 @@ describe("authenticate", () => {
 
     //
     test('error with axios user authentication', async () => {
-        axios.get.mockRejectedValue(new Error('Failed axios'));
+        mockAxios.get.mockRejectedValue(new Error('Failed axios'));
 
         //Simulates input request, this will not matter however as test user decides the output
         const req = mockRequestAuth("Test@ju.se", "test123");
@@ -102,7 +103,7 @@ describe("authenticate", () => {
 describe("checkAuth", () => {
     //valid authentication
     test('Valid authentication', async () => {
-        axios.get.mockResolvedValue({
+        mockAxios.get.mockResolvedValue({
             data: {
                 user: TestUser
             }
@@ -122,7 +123,7 @@ describe("checkAuth", () => {
 
     //failed authentication due to invalid axios
     test('Invalid authentication due to axios', async () => {
-        axios.get.mockResolvedValue();
+        mockAxios.get.mockResolvedValue();
 
         //Simulates input request, this will not matter however as test user decides the output
         const req = mockRequest({email:"Test@ju.se", password:"test123"});
@@ -137,7 +138,7 @@ describe("checkAuth", () => {
 
     //failed authentication due to axios err
     test('Invalid authentication due to axios err', async () => {
-        axios.get.mockRejectedValue(new Error('Failed axios'));
+        mockAxios.get.mockRejectedValue(new Error('Failed axios'));
 
         //Simulates input request, this will not matter however as test user decides the output
         const req = mockRequest({email:"Test@ju.se", password:"test123"});
@@ -152,7 +153,7 @@ describe("checkAuth", () => {
 
     //failed authentication due to invalid payload of jwt token (i.e invalid session)
     test('Invalid authentication due to invalid jwt payload', async () => {
-        axios.get.mockResolvedValue();
+        mockAxios.get.mockResolvedValue();
 
         //Simulates input request, this will not matter however as test user decides the output
         const req = mockRequest();
