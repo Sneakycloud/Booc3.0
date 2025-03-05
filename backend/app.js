@@ -30,7 +30,7 @@ const {Server} = require("socket.io");
 
 const corsconfig = {
   origin: "http://50.85.45.212:3000", //----------------Lägg frontend load balanser url här
-  credentials: true,
+  //credentials: true,
 }
 
 const server = http.createServer(app);
@@ -123,7 +123,7 @@ app.options("*", cors());
 app.use("/health", healthRouter);
 
 //Cors for the rest of the routes
-app.use(cors(corsconfig));
+//app.use(cors(corsconfig));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
