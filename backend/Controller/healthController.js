@@ -14,6 +14,7 @@ async function started(req,res) {
 async function ready(req,res) {
     //Users microservice
     console.log("Env vars:", process.env);
+    console.log("Production:", process.env.PRODUCTION_ENV);
 
     var usersStatus;
     try{
