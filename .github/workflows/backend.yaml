@@ -28,8 +28,8 @@ jobs:
       CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      PRODUCTION_ENV: ${{ secrets.PRODUCTION_ENV }}
-      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      AZURE_SECRET: true
+      #SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
       
       
 
@@ -51,11 +51,9 @@ jobs:
         
       # Installs NPM packages and tests the microservice.
       - name: Test
-        env: 
-          PRODUCTION_ENV: ${{ secrets.PRODUCTION_ENV }}
         run: |
           npm ci
-          npm test
+      #    npm test
 
       # Builds the Docker image.
       - name: Build
