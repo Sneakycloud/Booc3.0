@@ -23,8 +23,13 @@ const http = require('http');
 const {Server} = require("socket.io");
 
 
+// const corsconfig = {
+//   origin: "http://localhost:3000",
+//   credentials: true,
+// }
+
 const corsconfig = {
-  origin: "http://localhost:3000",
+  origin: "http://localhost:3000", //----------------Lägg frontend load balanser url här
   credentials: true,
 }
 
@@ -46,9 +51,9 @@ app.use((req, res, next) => {
   next();
 });
 */
-
-app.use(cors()); //app.use(cors(corsconfig));
-app.options("*", cors());
+app.use(cors(corsconfig));
+// app.use(cors()); //app.use(cors(corsconfig));
+// app.options("*", cors());
 
 
 
