@@ -3,7 +3,7 @@ import axios from 'axios';
 export const api = () => {
   if(process.env?.PROD == true || process.env?.PROD == "true"){
     return axios.create({
-      baseURL: "http://backend",
+      baseURL: "http://74.178.165.24",
       //withCredentials: true,
       headers:{
         //"Access-Control-Allow-Credentials":"true",

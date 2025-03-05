@@ -58,7 +58,7 @@ metadata:
 spec:
   selector:
     app: backend
-  type: ClusterIP
+  type: LoadBalancer #ClusterIP
   ports:
     - protocol: TCP
       port: 80
