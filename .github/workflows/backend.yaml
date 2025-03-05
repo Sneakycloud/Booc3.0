@@ -45,6 +45,8 @@ jobs:
       
       # Installs NPM packages and tests the microservice.
       - name: Test
+        env: 
+          PRODUCTION_ENV: ${{ secrets.PRODUCTION_ENV }}
         run: |
           npm ci
           npm test
