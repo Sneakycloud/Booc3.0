@@ -29,14 +29,14 @@ const {Server} = require("socket.io");
 // }
 
 const corsconfig = {
-  origin: "http://localhost:3000", //----------------Lägg frontend load balanser url här
+  origin: "http://50.85.45.212:3000", //----------------Lägg frontend load balanser url här
   credentials: true,
 }
 
 const server = http.createServer(app);
 io = new Server(server,{
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://50.85.45.212:3000",
     credentials: true,
   }
 });
@@ -51,7 +51,7 @@ app.use((req, res, next) => {
   next();
 });
 */
-app.use(cors(corsconfig));
+
 // app.use(cors()); //app.use(cors(corsconfig));
 // app.options("*", cors());
 
@@ -114,13 +114,17 @@ app.use(function(req, res, next) {
 app.use(jwt.init(process.env.SESSION_SECRET, {cookies: false}));
 
 
-
 //Routes
 app.use(responseInterceptor);
+app.use("/health", healthRouter);
+
+//Cors for the rest of the routes
+app.use(cors(corsconfig));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/api", apiRouter);
-app.use("/health", healthRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
