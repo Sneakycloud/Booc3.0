@@ -14,8 +14,9 @@ async function ready(req,res) {
     //Users microservice
     console.log("Production:", process.env.PROD);
 
+    var usersStatus;
     try{
-        const usersStatus = (await axios.get(`http://users-microservice/health/ready`)).status;
+        usersStatus = (await axios.get(`http://users-microservice/health/ready`)).status;
     }
     catch(error){
         if (error.response){
