@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+console.log("PROD = ", process.env.PRODUCTION_ENV);
+
 /**
  * Module dependencies.
  */
