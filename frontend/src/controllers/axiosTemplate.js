@@ -2,7 +2,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 export const api = axios.create({
-    baseURL: "http://backend.default.svc.cluster.local",
+    baseURL: "http://74.178.165.24", //backend.default.svc.cluter.local
     withCredentials: true,
     headers:{
       "Access-Control-Allow-Credentials":"true",
