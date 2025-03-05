@@ -25,8 +25,8 @@ spec:
           value: $DB_PASSWORD
         - name: SESSION_SECRET
           value: $SESSION_SECRET
-        #- name: REACT_APP_PROD
-        #  value: "$REACT_APP_PROD"
+        - name: REACT_APP_PROD
+          value: "$REACT_APP_PROD"
         resources:
           requests:
             cpu: 128m
