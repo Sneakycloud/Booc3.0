@@ -26,7 +26,7 @@ spec:
         - name: SESSION_SECRET
           value: $SESSION_SECRET
         - name: PRODUCTION_ENV
-          value: $PRODUCTION_ENV
+          value: "$PRODUCTION_ENV"
         resources:
           requests:
             cpu: 128m
