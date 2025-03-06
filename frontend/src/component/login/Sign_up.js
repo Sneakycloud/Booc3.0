@@ -52,7 +52,7 @@ export default function Sign_up_page(){
 
                             <Textfield 
                                 name="username" 
-                                type="username"
+                                type="text"
                                 value={values.username} 
                                 onChange={handleChange} 
                                 label="username" 
@@ -80,9 +80,10 @@ export default function Sign_up_page(){
                                 id = "password2"
                                 //error={failedSignUp}
                             />
-                        </div>
-                        <div className='PageButtons'>
+
                             <button className='leftButton' type="submit">Complete sign up</button>
+                        </div>
+                        <div className='PageButtonsSignUp'>
                             <button className='rightButton' type="button" onClick={changeToLoginPage}>Login page →</button>
                         </div>
                     </Form>

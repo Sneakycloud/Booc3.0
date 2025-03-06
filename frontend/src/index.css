@@ -103,9 +103,15 @@ code {
   gap: 4px;
 }
 
-.PageButtons{
+.PageButtonsSignUp{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  height: 6%;
+}
+
+.PageButtonsLogin{
+  display: flex;
+  justify-content: flex-start;
   height: 6%;
 }
 

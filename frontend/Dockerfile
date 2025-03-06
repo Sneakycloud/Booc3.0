@@ -7,4 +7,4 @@ RUN npm ci --omit=dev
 COPY ./public ./public
 COPY ./src ./src
 
-CMD npm start
+CMD npm run build
