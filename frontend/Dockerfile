@@ -8,3 +8,5 @@ COPY ./public ./public
 COPY ./src ./src
 
 CMD npm run build
+CMD npm install -g serve
+CMD serve -s build
