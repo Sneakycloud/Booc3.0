@@ -4,9 +4,9 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 #COPY app.js ./
 RUN npm ci --omit=dev
+RUN npm install -g serve
 COPY ./public ./public
 COPY ./src ./src
+RUN npm run build
 
-CMD npm run build
-CMD npm install -g serve
 CMD serve -s build
