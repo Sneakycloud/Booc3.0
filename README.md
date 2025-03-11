@@ -38,6 +38,7 @@ Tools
 8. Anywhere
     - Run all github workflows
     - REACT_APP_BACKEND_IP = kubectl get service backend
+    - Run frontend workflow after adding the new secret
     - ^place external ip from above in frontend axios template and replace the destination with "http://{external_ip}:80/"
     - ^Later this will instead be the ip which you use to connect to the website in a browser
 
