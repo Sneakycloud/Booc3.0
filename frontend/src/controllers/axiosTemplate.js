@@ -7,7 +7,7 @@ export const api = () => {
   //-------------------------------------------------------
   if(process.env.REACT_APP_PROD == true || process.env.REACT_APP_PROD == "true"){
     return axios.create({
-      baseURL: `http://${REACT_APP_BACKEND_IP}:80`,
+      baseURL: `http://${process.env?.REACT_APP_BACKEND_IP}:80`,
       //withCredentials: true,
       headers:{
         //"Access-Control-Allow-Credentials":"true",
