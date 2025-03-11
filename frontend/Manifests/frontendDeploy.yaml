@@ -27,8 +27,8 @@ spec:
           value: $SESSION_SECRET
         - name: REACT_APP_PROD
           value: "$REACT_APP_PROD"
-        - name: REACT_APP_BACKEND_IP
-          value: "$REACT_APP_BACKEND_IP"
+        #- name: REACT_APP_BACKEND_IP
+        #  value: "$REACT_APP_BACKEND_IP"
         resources:
           requests:
             cpu: 128m

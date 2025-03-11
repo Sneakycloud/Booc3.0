@@ -2,12 +2,19 @@ import axios from 'axios';
 
 export const api = () => {
   console.log("PROD is", process.env?.REACT_APP_PROD);
-  
+  return axios.create({
+    baseURL: `http://9.163.62.170:80`,
+    //withCredentials: true,
+    headers:{
+      //"Access-Control-Allow-Credentials":"true",
+      "Authorization": authheader()
+    }
+  })
 
   //-------------------------------------------------------
   if(process.env.REACT_APP_PROD == true || process.env.REACT_APP_PROD == "true"){
     return axios.create({
-      baseURL: `http://9.163.62.170:80`,
+      baseURL: `http://${process.env?.REACT_APP_BACKEND_IP}:80`,
       //withCredentials: true,
       headers:{
         //"Access-Control-Allow-Credentials":"true",
