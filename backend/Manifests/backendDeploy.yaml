@@ -25,6 +25,8 @@ spec:
           value: $DB_PASSWORD
         - name: SESSION_SECRET
           value: $SESSION_SECRET
+        - name: PRODUCTION_ENV
+          value: "$PRODUCTION_ENV"
         resources:
           requests:
             cpu: 128m
@@ -32,78 +34,34 @@ spec:
           limits:
             cpu: 256m
             memory: 256Mi
+        livenessProbe:
+            httpGet:
+              path: /health/alive
+              port: 6400
+            initialDelaySeconds: 3
+            periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 6400
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        startupProbe:
+          httpGet:
+            path: /health/started
+            port: 6400
+          failureThreshold: 30
+          periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: backend
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: backend
-  type: LoadBalancer
+  type: LoadBalancer #ClusterIP
   ports:
     - protocol: TCP
       port: 80
       targetPort: 6400
-  
-#ingress with no public ip and terminates tls for backend
-#apiVersion: approuting.kubernetes.azure.com/v1alpha1
-#kind: NginxIngressController
-#metadata:
-#  name: backend-ingress
-#spec:
-#  ingressClassName: nginx-internal
-#  controllerNamePrefix: nginx-internal
-#  loadBalancerAnnotations: 
-#    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-#  tls:
-#  - hosts:
-#    - backend-ingress.internal
-#    secretName: backend-tls
-#  rules:
-#    - http:
-#        paths:
-#          - pathType: Prefix
-#            path: "/"
-#            backend:
-#              service:
-#                name: backend
-#                port:
-#                  number: 80     
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: backend-ingress
-spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-    - backend-ingress.internal
-    secretName: backend-tls
-  rules:
-  - http:
-      paths:
-        - pathType: Prefix
-          path: "/"
-          backend:
-            service:
-              name: backend
-              port:
-                number: 80
----
-#This service will later be moved to the frontend and will act as the exposed public ip      
-apiVersion: v1
-kind: Service
-metadata:
-  name: public-ip
-spec:
-  selector:
-    app: backend-ingress
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 443
-      targetPort: 443

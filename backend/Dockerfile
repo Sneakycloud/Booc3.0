@@ -11,5 +11,9 @@ COPY ./public ./public
 COPY ./routes ./routes
 COPY ./Service ./Service
 COPY ./views ./views
+COPY ./AxiosTemplate ./AxiosTemplate
+COPY ./__mocks__ ./__mocks__
+COPY ./Tests ./Tests
+
 
 CMD npm start

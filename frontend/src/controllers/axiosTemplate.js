@@ -1,10 +1,42 @@
 import axios from 'axios';
-axios.defaults.withCredentials = true;
 
-export const api = axios.create({
-    baseURL: "https://132.164.31.120:443/",
-    withCredentials: true,
-    headers:{
-      "Access-Control-Allow-Credentials":"true",
-    }
-  })
+export const api = () => {
+  console.log("PROD is", process.env?.REACT_APP_PROD);
+  
+
+  //-------------------------------------------------------
+  if(process.env.REACT_APP_PROD == true || process.env.REACT_APP_PROD == "true"){
+    return axios.create({
+      baseURL: "http://50.85.162.88:80",
+      //withCredentials: true,
+      headers:{
+        //"Access-Control-Allow-Credentials":"true",
+        "Authorization": authheader()
+      }
+    })
+  }
+  else{
+    return axios.create({
+      baseURL: "http://localhost:6400",
+      //withCredentials: true,
+      headers:{
+        //"Access-Control-Allow-Credentials":"true",
+        "Authorization": authheader()
+      }
+    })
+  }
+
+
+}
+
+
+
+
+
+
+function authheader(){
+  const token = localStorage.getItem('token');
+  const header = `bearer ${token}`;
+  if(!token){return null}
+  return header;
+}
