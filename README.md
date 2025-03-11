@@ -28,6 +28,7 @@ Tools
     - DB_USERNAME = username for a acount to mongodb uri
     - DB_PASSWORD = a password for a account to a mongodb uri
     - SESSION_SECRET = a secret to be used (write whatever you want here)
+    - PRODUCTION_ENV = true
 7. In your kubectl folder, do following:
     - ```az aks get-credentials --name BoocApp --resource-group BoocApp```
     - Make copy of config and name it config.bak
@@ -36,7 +37,7 @@ Tools
         - KUBE_CONFIG = (content of base64 encoded config file)
 8. Anywhere
     - Run all github workflows
-    - kubectl get service backend
+    - REACT_APP_BACKEND_IP = kubectl get service backend
     - ^place external ip from above in frontend axios template and replace the destination with "http://{external_ip}:80/"
     - ^Later this will instead be the ip which you use to connect to the website in a browser
 
