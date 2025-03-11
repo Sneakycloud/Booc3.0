@@ -30,6 +30,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
       REACT_APP_PROD: "true"
+      REACT_APP_BACKEND_IP: ${{ secrets.REACT_APP_BACKEND_IP }}
 
     steps:
 
