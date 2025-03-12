@@ -1,4 +1,5 @@
 const { startmongoose } = require('./mongodbStarter.js');
+//const users = require("./schemas/userSchema.js");
 const groups = require("./schemas/groupSchema.js");
 
 //Get info about group for recreating form
@@ -56,9 +57,11 @@ async function createGroup(groupName, owner, members){
         const newGroup = new groups({groupName,owners:owner, members});
         //console.log(newUser);
         await newGroup.save();
+        console.log("Group created");
         return newGroup.toObject(); //success
     }
     catch{
+        console.log("Failed to create group");
         return null; //failed
     }
 }  

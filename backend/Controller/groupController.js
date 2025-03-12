@@ -4,7 +4,7 @@ const {getGroup:getGroupModel,
     updateGroup:updateGroupModel,
     deleteGroup:deleteGroupModel,
     leaveGroup:leaveGroupModel,
-    checkIfOwner} =  require("../model/groupModel");
+    checkIfOwner} =  require("../Model/groupModel");
 const { sendToSocket, getSocket } = require("../model/io_socket");
 
 const axios = require('axios');
@@ -43,7 +43,7 @@ async function getAllGroups(req, res){
         if(response.data.user === null){
             return res.status(500).send({msg:"Failed to get groups"});
         }
-        return res.status(200).send({msg:"Got groups", groups:result});
+        return res.status(200).send({msg:"Got groups", groups: response.data.groups});
     }
     catch{
         return res.status(500).send({msg:"Failed to get groups"});
@@ -52,7 +52,7 @@ async function getAllGroups(req, res){
 
 //Create group
 async function createGroup(req, res){
-    const {body : {groupName, members}} = req
+    const {body : {groupName, members}} = req;
     try{
         
         if(!groupName || groupName == ""){
@@ -204,55 +204,49 @@ async function leaveGroup(req, res) {
         const {body : {groupName}} = req;
         //var result = await leaveGroupModel(groupName, req.session.user.username, req.session.user.identifier);
         const result = await axios.delete(`http://localhost:8080/api/groups`,
-            {
-                goupname: groupName,
+            {data: {
+                groupName: groupName,
                 username: req.session.user.username,
                 identifier: req.session.user.identifier
-
+            }
         });
         if(result === null){
             return res.status(500).send({msg:"Failed leave group"});
         }
         
         //delete group if empty
-        //await getGroupModel(groupName)
-        const groupState = (await axios.get(`http://localhost:8080/api/group`,
-            {
-                goupname: groupName,
+        const groupResponse = (await axios.get(`http://localhost:8080/api/group`,
+            {params: {
+                groupName: groupName,
                 username: req.session.user.username,
                 identifier: req.session.user.identifier
+            }
+        }));
+        console.log("Group state response:", groupResponse.data);
 
-        }))?.owners[0];
+        const groupState = groupResponse.data?.owners?.[0];
+
         console.log("Group state:", groupState);
         if(!(groupState?.username) || !(groupState?.identifier)){
-            //var result = await deleteGroupModel(groupName);
-            const result = await axios.delete(`http://localhost:8080/api/group`,
-                {
-                    goupname: groupName
+            
+            const deleteResult = await axios.delete(`http://localhost:8080/api/group`,
+                {data: {groupName: groupName}
             });
-            if(result === null){
+
+            if(deleteResult === null){
                 sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
                 return res.status(200).send({msg:"Left group"});
             }
         }
         
         sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
-
-        /*
-        var members = getGroup(groupName).members;
-
-        //Send notification to all group members
-        for(const {username, identifier} of members){
-            const emitted_obj = {Type:"Left group", Cause:`${req.session.user.username}#${ req.session.user.identifier}`,}
-            await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
-        }
-            */
         
         return res.status(200).send({msg:"Left group"});
     }
     catch(err){
-        console.log(err);
-        return res.status(500).send({msg:"Failed leave group"});
+        console.error("Error in GET request for group state:", err.response ? err.response.data : err.message);
+        // console.log(err);
+        return res.status(500).send({msg:"Failed leave group", error: err.message });
     }
 }
 
