@@ -115,16 +115,16 @@ async function leaveGroup(req, res) {
         }
 
         //delete group if empty
-        const groupState = (await getGroupModel(groupName))?.owners[0];
-        console.log("Group state:", groupState);
+        // const groupState = (await getGroupModel(groupName))?.owners[0];
+        // console.log("Group state:", groupState);
 
-        if(!(groupState?.username) || !(groupState?.identifier)){
-            var result = await deleteGroupModel(groupName);
-            if(result === null){
-                return res.status(200).send({msg:"Left group"});
-            }
-        }
-        
+        // if(!(groupState?.username) || !(groupState?.identifier)){
+        //     var result = await deleteGroupModel(groupName);
+        //     if(result === null){
+        //         return res.status(200).send({msg:"Left group"});
+        //     }
+        // }
+
         return res.status(200).send({msg:"Left group"});
     }
     catch(err){

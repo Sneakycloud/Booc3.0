@@ -215,31 +215,29 @@ async function leaveGroup(req, res) {
         }
         
         //delete group if empty
-        const groupResponse = (await axios.get(`http://localhost:8080/api/group`,
-            {params: {
-                groupName: groupName,
-                username: req.session.user.username,
-                identifier: req.session.user.identifier
-            }
-        }));
-        console.log("Group state response:", groupResponse.data);
+        // const groupResponse = (await axios.get(`http://localhost:8080/api/group`,
+        //     {params: {
+        //         groupName: groupName
+        //     }
+        // }));
+        // console.log("Group state response:", groupResponse.data);
 
-        const groupState = groupResponse.data?.owners?.[0];
+        // const groupState = groupResponse.data?.owners?.[0];
 
-        console.log("Group state:", groupState);
-        if(!(groupState?.username) || !(groupState?.identifier)){
+        // console.log("Group state:", groupState);
+        // if(!(groupState?.username) || !(groupState?.identifier)){
             
-            const deleteResult = await axios.delete(`http://localhost:8080/api/group`,
-                {data: {groupName: groupName}
-            });
+        //     const deleteResult = await axios.delete(`http://localhost:8080/api/group`,
+        //         {data: {groupName: groupName}
+        //     });
 
-            if(deleteResult === null){
-                sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
-                return res.status(200).send({msg:"Left group"});
-            }
-        }
+        //     if(deleteResult === null){
+        //         sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
+        //         return res.status(200).send({msg:"Left group"});
+        //     }
+        // }
         
-        sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
+        // sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
         
         return res.status(200).send({msg:"Left group"});
     }
