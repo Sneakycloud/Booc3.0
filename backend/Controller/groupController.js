@@ -21,7 +21,7 @@ function inviteToObject(array){
 //Get info about group for recreating form
 async function getGroup(req, res){
     //Gets info
-    const groupName = req.session.groupName;
+    const groupName = req.jwt.groupName;
     //var result = await getGroupModel(groupName);
     const response = await groupsMsApi().get(`/api/group`,
         {params: {
@@ -41,8 +41,8 @@ async function getAllGroups(req, res){
         //var result = await getAllGroupsModel(req.session.user.username, req.session.user.identifier);
         const response = await groupsMsApi().get(`/api/groups`,
             {params: {
-                username: req.session.user.username,
-                identifier: req.session.user.identifier
+                username: req.jwt.user.username,
+                identifier: req.jwt.user.identifier
         }});
         
         if(response.data.user === null){
@@ -109,7 +109,7 @@ async function updateGroup(req, res){
                 return res.status(500).send({msg:"Failed to update"});
             }
 
-            const isOwner = await checkIfOwner(currentGroupName, req.session.user.username, req.session.user.identifier);
+            const isOwner = await checkIfOwner(currentGroupName, req.jwt.user.username, req.jwt.user.identifier);
             if(isOwner === null){
 
                 return res.status(403).send({msg:"User does not have the authority to update group"});
@@ -129,8 +129,8 @@ async function updateGroup(req, res){
                     groupName: groupName,
                     owners: owners,
                     members: members,
-                    username: req.session.user.username,
-                    identifier: req.session.user.identifier
+                    username: req.jwt.user.username,
+                    identifier: req.jwt.user.identifier
                 
             });
             // if(!result || !result.data.group){
@@ -171,7 +171,7 @@ async function deleteGroup(req, res){
     try{
 
         console.log("HERE, BUT NO FURTHUR");
-        if((await checkIfOwner(groupName, req.session.user.username, req.session.user.identifier)) === null){
+        if((await checkIfOwner(groupName, req.jwt.user.username, req.jwt.user.identifier)) === null){
 
             console.log("User does not have the authority to delete group")
             return res.status(403).send({msg:"User does not have the authority to delete group"});
@@ -223,8 +223,8 @@ async function leaveGroup(req, res) {
         const result = await groupsMsApi().delete(`/api/groups`,
             {data: {
                 groupName: groupName,
-                username: req.session.user.username,
-                identifier: req.session.user.identifier
+                username: req.jwt.user.username,
+                identifier: req.jwt.user.identifier
             }
         });
 
