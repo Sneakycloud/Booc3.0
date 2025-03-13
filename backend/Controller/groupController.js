@@ -118,38 +118,39 @@ async function updateGroup(req, res){
             //var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.session.user.username, identifier:req.session.user.identifier});
             var result = await axios.put(`http://localhost:8080/api/group`,
                 {
-                    curentgroup: currentGroupName,
-                    groupname: groupName,
+                    currentGroup: currentGroupName,
+                    groupName: groupName,
                     owners: owners,
                     members: members,
                     username: req.session.user.username,
                     identifier: req.session.user.identifier
+                
             });
-            if(result === null){
-                return res.status(500).send({msg:"Failed to update group"});
-            }
+            // if(!result || !result.data.group){
+            //     return res.status(500).send({msg:"Failed to update group"});
+            // }
+            console.log("Check the result : ", result.data);
+            // //Send notification to all group members
+            // for(const {username, identifier} of [...result.members, members]){
+            //     const emitted_obj = {Type:"Update group", Cause:`${req.session.user.username}#${req.session.user.identifier}`,}
+            //     await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
+            // }
 
-            //Send notification to all group members
-            for(const {username, identifier} of [...result.members, members]){
-                const emitted_obj = {Type:"Update group", Cause:`${req.session.user.username}#${req.session.user.identifier}`,}
-                await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
-            }
-
-            //Send notification to new owner
-            for(const {username, identifier} of [...result.owners, {username:req.session.user.username, identifier:req.session.user.identifier}]){
-                const emitted_obj = {Type:"Update group", Cause:`${req.session.user.username}#${req.session.user.identifier}`,}
-                await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
-            }
+            // //Send notification to new owner
+            // for(const {username, identifier} of [...result.owners, {username:req.session.user.username, identifier:req.session.user.identifier}]){
+            //     const emitted_obj = {Type:"Update group", Cause:`${req.session.user.username}#${req.session.user.identifier}`,}
+            //     await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
+            // }
 
             return res.status(200).send({msg:"Updated group"});
         }
         catch(err){
-            console.log("Failed to update");
+            console.log("Failed to update----");
             throw err;
         }
     }
     catch(err){
-        console.log(err);
+        //console.log(err);
         return res.status(500).send({msg:"Failed to update group"});
     }
     
