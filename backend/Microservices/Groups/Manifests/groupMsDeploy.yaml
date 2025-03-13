@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: group-microservice
+  template:
+    metadata:
+      labels:
+        app: group-microservice
+    spec:
+      containers: 
+      - name: group-microservice
+        image: $CONTAINER_REGISTRY_LOGIN_SERVER/group-microservice:$VERSION
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PORT
+          value: "8080"
+        - name: DB_USERNAME
+          value: $DB_USERNAME
+        - name: DB_PASSWORD
+          value: $DB_PASSWORD
+        - name: SESSION_SECRET
+          value: $SESSION_SECRET
+        resources:
+          requests:
+            cpu: 128m
+            memory: 128Mi
+          limits:
+            cpu: 256m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: group-microservice
+spec:
+  selector:
+    app: group-microservice
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,4 +1,5 @@
 const { startmongoose } = require('./mongodbStarter.js');
+//const users = require("./schemas/userSchema.js");
 const groups = require("./schemas/groupSchema.js");
 
 //Get info about group for recreating form
@@ -56,9 +57,11 @@ async function createGroup(groupName, owner, members){
         const newGroup = new groups({groupName,owners:owner, members});
         //console.log(newUser);
         await newGroup.save();
+        console.log("Group created");
         return newGroup.toObject(); //success
     }
     catch{
+        console.log("Failed to create group");
         return null; //failed
     }
 }  
@@ -124,12 +127,8 @@ async function checkIfOwner(groupName, username, identifier) {
             {owners: {$all:[user]}}
         ]
     });
-       
-    if(!group || group == null) {
-        console.log("Not the owner");
-        return null;
-    }
-    console.log("Is the owner")
+    console.log(group);
+    if(!group || group == null){return null;}
     return 1; //Found group where user is owner
     
 }
