@@ -103,8 +103,7 @@ async function updateGroup(req, res){
                 return res.status(500).send({msg:"Failed to update"});
             }
             const isOwner = await checkIfOwner(currentGroupName, req.session.user.username, req.session.user.identifier);
-    
-            if(!isOwner || isOwner === null || isOwner == 0){
+            if(isOwner === null){
                 return res.status(403).send({msg:"User does not have the authority to update group"});
             }
         }
@@ -112,7 +111,6 @@ async function updateGroup(req, res){
             console.log("Failed to check if the user had authority to delete");
             console.log(err);
         }
-
         //Update group
         try{
             //var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.session.user.username, identifier:req.session.user.identifier});
@@ -145,7 +143,7 @@ async function updateGroup(req, res){
             return res.status(200).send({msg:"Updated group"});
         }
         catch(err){
-            console.log("Failed to update----");
+            console.log("Failed to update");
             throw err;
         }
     }
@@ -159,18 +157,21 @@ async function updateGroup(req, res){
 
 //Delete group
 async function deleteGroup(req, res){
-    const {body : {groupName}} = req
+    const {body : {groupName}} = req;
     try{
+        console.log("HERE, BUT NO FURTHUR");
         if((await checkIfOwner(groupName, req.session.user.username, req.session.user.identifier)) === null){
             console.log("User does not have the authority to delete group")
             return res.status(403).send({msg:"User does not have the authority to delete group"});
         }
+        console.log("WHY STOP HERE?");
     }
     catch(err){
         console.log("Failed to check if the user had authority to delete");
-        console.log(err);
+        //console.log(err);
         return res.status(500).send({msg:"Failed to check if the user had authority to delete"});
     }
+    console.log("YOU MADE IT THIS FAR");
     
     //Get group
     //var members = await getGroupModel(groupName).members;
@@ -182,9 +183,11 @@ async function deleteGroup(req, res){
     //delete group
     //var result = await deleteGroupModel(groupName);
     const result = await axios.delete(`http://localhost:8080/api/group`,
-        {
+        {data: {
             groupname: groupName,
+        }
     });
+    console.log("AND NOW YOU'RE HERE");
     if(result === null){
         return res.status(500).send({msg:"Failed to delete group"});
     }

@@ -124,8 +124,12 @@ async function checkIfOwner(groupName, username, identifier) {
             {owners: {$all:[user]}}
         ]
     });
-    console.log(group);
-    if(!group || group == null){return null;}
+       
+    if(!group || group == null) {
+        console.log("Not the owner");
+        return null;
+    }
+    console.log("Is the owner")
     return 1; //Found group where user is owner
     
 }
