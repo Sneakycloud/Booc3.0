@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers: 
+      - name: backend
+        image: $CONTAINER_REGISTRY_LOGIN_SERVER/backend:$VERSION
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PORT
+          value: "6400"
+        - name: DB_USERNAME
+          value: $DB_USERNAME
+        - name: DB_PASSWORD
+          value: $DB_PASSWORD
+        - name: SESSION_SECRET
+          value: $SESSION_SECRET
+        - name: PRODUCTION_ENV
+          value: "$PRODUCTION_ENV"
+        resources:
+          requests:
+            cpu: 128m
+            memory: 128Mi
+          limits:
+            cpu: 256m
+            memory: 256Mi
+        livenessProbe:
+            httpGet:
+              path: /health/alive
+              port: 6400
+            initialDelaySeconds: 3
+            periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 6400
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        startupProbe:
+          httpGet:
+            path: /health/started
+            port: 6400
+          failureThreshold: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  type: LoadBalancer #ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 6400

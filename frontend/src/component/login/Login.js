@@ -90,10 +90,12 @@ export default function Login_page(){
                                 autoComplete="current-password"/>
                             {/*
                             <Link to=''>Reset password </Link>*/}
-                        </div>
-                        <div className='PageButtons'>
-                            <button className='leftButton' type='button' onClick={changeToSignUpPage}>← Sign up</button>
+
+
                             <button className='rightButton' type="submit">Login</button>
+                        </div>
+                        <div className='PageButtonsLogin'>
+                            <button className='leftButton' type='button' onClick={changeToSignUpPage}>← Sign up</button>
                         </div>
                     </Form>
                 )}

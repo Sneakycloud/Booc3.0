@@ -4,7 +4,7 @@ export async function getEvents(username, identifier){
     var event = [];
   
     try {
-      const response = await api.get('/api/event', {params: { username, identifier }});
+      const response = await api().get('/api/event', {params: { username, identifier }});
       if(typeof response.data === "undefined" || response.data?.msg === "Failed to get user"){
         throw "Error";
       }
@@ -25,12 +25,8 @@ export async function deleteEvent(_id)
 {
   var ProccesedResponse = "";
 
-  await api.delete('/api/event', 
+  await api().delete('/api/event', 
     {
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:6400",
-        "Access-Control-Allow-Credentials":"true",
-      },
       data: {
         _id:_id,
       }

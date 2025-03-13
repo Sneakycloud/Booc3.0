@@ -3,18 +3,19 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 //import session from "express-session";
-var session = require("express-session")
 var logger = require('morgan');
 var cors = require("cors");
 const dotenv = require("dotenv").config();
-var MongoDBStore = require('connect-mongodb-session')(session);
 const winstoneLogger = require("./Service/winstoneLogger");
 const loggerFormatter = require("./Service/httpRequestFormatter");
 const responseInterceptor = require("./Service/responseInterceptor");
+const jwt = require('jwt-express');
+//const jwt = require('jsonwebtoken');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var apiRouter = require("./routes/api");
+var healthRouter = require("./routes/health");
 
 var app = express();
 //Creates socket connection server
@@ -22,15 +23,20 @@ const http = require('http');
 const {Server} = require("socket.io");
 
 
+// const corsconfig = {
+//   origin: "http://localhost:3000",
+//   credentials: true,
+// }
+
 const corsconfig = {
-  origin: "http://localhost:3000",
-  credentials: true,
+  origin: "http://50.85.45.212:3000", //----------------Lägg frontend load balanser url här
+  //credentials: true,
 }
 
 const server = http.createServer(app);
 io = new Server(server,{
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://50.85.45.212:3000",
     credentials: true,
   }
 });
@@ -38,56 +44,28 @@ io = new Server(server,{
 app.io = io;
 
 
-
-app.options("*", cors(corsconfig))
-app.use(cors(corsconfig));
-
-//Creates mongoDB connection for session storage, https://www.npmjs.com/package/connect-mongodb-session
-var store = new MongoDBStore({
-  uri: `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@booc.oduvk.mongodb.net/Booc?retryWrites=true&w=majority&appName=Booc `,
-  databaseName: "Booc",
-  collection: 'mySessions',
+/*
+app.use((req, res, next) => {
+  console.log("got request")
+  //return res.send({msg:"server recived message"});
+  next();
 });
+*/
 
-//Catches errors with storing sessions
-store.on('error', function(error) {
-  console.log(error);
+// app.use(cors()); //app.use(cors(corsconfig));
+// app.options("*", cors());
+
+
+
+
+
+/*
+app.use((req, res, next) => {
+  console.log("got request")
+  return res.send({msg:"server recived message"});
+  next();
 });
-
-
-//Implements sessions
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  saveUninitialized: false, //turns off storing empty sessions
-  resave: false,
-  cookie: {
-    maxAge: 1000*60*60*24, //24 hours
-  },
-  store: store,
-}));
-
-io.engine.use(session);
-
-io.on('connection', (socket) => {
-  console.log("Connection 1");
-
-  socket.on('connect', function(socket){
-    console.log("Connection 2");
-  try{
-    const sessionId = socket.request.session.id;
-    console.log("You get ", sessionId);
-    // the session ID is used as a room
-    socket.join(sessionId);
-  }
-  catch(err){
-    console.log("Failed to establish socket connection");
-    console.log(err);
-  }
-  })
-
-  
-
-})
+*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -109,22 +87,48 @@ app.use(function(req, res, next){
 })
 */
 
+
+
+//JWT handeling
+
+//middleware that parses incoming tokens and adds them to the req as 
 /*
-app.use((req, res, next) => {
-  console.log(req.session)
+app.use(function(req, res, next) {
+  try{
+    token = req?.header('Authorization');
+    if(!token | token === "Bearer ") next();
+  
+    decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
+    console.log("Decoded token");
+    req.jwt = decodedToken;
+  }
+  catch(err){
+    console.log(err)
+  }
   next();
+
 });
 */
 
-//IO uses shared session
-// io.use(sharedsession(session, {
-//   autoSave: true,
-// }));
+//jwt-express init
+app.use(jwt.init(process.env.SESSION_SECRET, {cookies: false}));
 
+
+//Routes
 app.use(responseInterceptor);
+
+//Health route for probing
+app.use(cors());
+app.options("*", cors());
+app.use("/health", healthRouter);
+
+//Cors for the rest of the routes
+//app.use(cors(corsconfig));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/api", apiRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,18 +1,18 @@
 var express = require('express');
-const {authenicate, authStatus, removeAuth} = require("../controller/authController");
+const {authenicate, authStatus, removeAuth} = require("../Controller/authController");
 const {getCurrentUser,
     createUser, 
     deleteUser, 
     changePassword,
-    changeStartPage} = require('../controller/usersController');
+    changeStartPage} = require('../Controller/usersController');
 const {getGroup,
     getAllGroups,
     createGroup,
     updateGroup,
     deleteGroup,
-    leaveGroup} = require("../controller/groupController");
-const {addFriend, deleteFriend} = require('../controller/friendController');
-const { createEvent, deleteEvent, getEvents } = require('../controller/eventController');
+    leaveGroup} = require("../Controller/groupController");
+const {addFriend, deleteFriend} = require('../Controller/friendController');
+const { createEvent, deleteEvent, getEvents } = require('../Controller/eventController');
 var router = express.Router();
 
 //Authorization
@@ -45,7 +45,6 @@ router.delete("/groups", leaveGroup);
 
 //Events
 router.get("/event", getEvents);
-router.post("/event", createEvent);
 router.post("/event", createEvent);
 router.delete("/event", deleteEvent);
 
