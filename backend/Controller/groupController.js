@@ -6,7 +6,7 @@ const {getGroup:getGroupModel,
     leaveGroup:leaveGroupModel,
     checkIfOwner} =  require("../Model/groupModel");
 
-const { sendToSocket, getSocket } = require("../model/io_socket");
+const { sendToSocket, getSocket } = require("../Model/io_socket");
 const {groupsMsApi} = require("../AxiosTemplate/AxiosGroupMs.js");
 
 const jwt = require('jwt-express');
