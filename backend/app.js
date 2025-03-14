@@ -147,7 +147,13 @@ app.use(function(err, req, res, next) {
 });
 
 
-server.listen(6400)
-module.exports = {app,io};
+// server.listen(6400)
+// module.exports = {app,io,server};
 
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(6400, () => {
+    console.log('Server running on port 6400');
+  });
+}
 
+module.exports = { app, io, server };
