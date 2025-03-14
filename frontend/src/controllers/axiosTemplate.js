@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = () => {
-  console.log("PROD is", process.env.REACT_APP_PROD);
+  //console.log("PROD is", process.env.REACT_APP_PROD);
 
   if(process.env.REACT_APP_PROD == true || process.env.REACT_APP_PROD == "true"){
     return axios.create({
