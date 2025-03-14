@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const events = require("./schemas/eventSchema");
-const users = require("./schemas/userSchema");
+const events = require("./schemas/eventSchemas");
+//const users = require("./schemas/userSchema");
 const {startmongoose} = require('./mongodbStarter');
 
 
@@ -44,8 +44,7 @@ async function createEvent(title, date, fromTime, toTime, location, description,
     }
 }
 
-
-
+//check if it is the creator
 async function checkIfCreator(_id, username, identifier)
 {
     startmongoose();
@@ -81,8 +80,6 @@ async function checkIfCreator(_id, username, identifier)
     return 1;
 }
 
-
-
 //delete event
 async function deleteEventModel(_id) 
 {
@@ -104,10 +101,6 @@ async function deleteEventModel(_id)
         return null;
     }
 }
-
-
-
-
 
 // Get users events
 async function getEvents(username, identifier){
@@ -139,8 +132,6 @@ async function getEvents(username, identifier){
         return null;
     }
 }
-
-
 
 module.exports = {
     createEvent,
