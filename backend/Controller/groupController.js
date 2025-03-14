@@ -21,7 +21,7 @@ function inviteToObject(array){
 //Get info about group for recreating form
 async function getGroup(req, res){
     //Gets info
-    const groupName = req.jwt.groupName;
+    const groupName = req.query.groupName;
     //var result = await getGroupModel(groupName);
     const response = await groupsMsApi().get(`/api/group`,
         {params: {
