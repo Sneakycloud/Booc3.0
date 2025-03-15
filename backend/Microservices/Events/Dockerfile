@@ -8,4 +8,4 @@ COPY backend/Microservices/Events/Controller ./Controller
 COPY backend/Microservices/Events/Model ./Model
 COPY backend/Microservices/Events/Router ./Router
 
-CMD node geventsMs.js
+CMD node eventsMs.js

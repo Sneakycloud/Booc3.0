@@ -4,7 +4,8 @@ const {createEvent:createEventModel,
         deleteEventModel,
         checkIfCreator,
         getEvents:getEventsModel} = eventModel;
-const jwt = require('jwt-express');   
+const jwt = require('jwt-express');  
+const {eventsMsApi} = require("../AxiosTemplate/AxiosEventMs.js"); 
 
 const axios = require('axios');
 
@@ -20,7 +21,7 @@ async function createEvent(req, res){
     const createdBy = req.jwt.payload;
     const mappedInvite = invitePeople.map(inviteToObject); //Transforms the [[]] to [{}]
 
-    const result = await axios.post(`http://localhost:5000/api/event`,{
+    const result = await eventsMsApi().post(`api/event`,{
         title: title,
         date: date,
         fromTime: fromTime,
@@ -74,7 +75,7 @@ async function deleteEvent(req, res) {
     //invited people:
     
     //delete the event
-    const result = await axios.delete(`http://localhost:5000/api/event`,
+    const result = await eventsMsApi().delete(`/api/event`,
         {date: {
             id: _id
         }});
@@ -93,7 +94,7 @@ async function getEvents(req, res){
         var uName = req.jwt.payload.username;
         var uId = req.jwt.payload.identifier;
         
-        var result = await axios.get(`http://localhost:5000/api/event`,
+        var result = await eventsMsApi().get(`/api/event`,
             {params: {
                 username: uName, 
                 identifier: uId
