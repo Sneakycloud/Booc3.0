@@ -63,6 +63,7 @@ async function createGroup(req, res){
             return res.status(500).send({msg:"Failed to create group"});
         }
         const owner = [{username:req.jwt.username, identifier:req.jwt.identifier}];
+        console.log(owner);
         const memberObjectArray = members.map(inviteToObject);
 
         const result = await groupsMsApi().post(`/api/group`,

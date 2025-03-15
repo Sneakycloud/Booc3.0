@@ -55,7 +55,7 @@ async function createGroup(groupName, owner, members){
     try{
         //Create the user
         const newGroup = new groups({groupName,owners:owner, members});
-        //console.log(newUser);
+        console.log("I model: " + newGroup.owners);
         await newGroup.save();
         console.log("Group created");
         return newGroup.toObject(); //success
