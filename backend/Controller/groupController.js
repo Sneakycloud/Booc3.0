@@ -62,7 +62,7 @@ async function createGroup(req, res){
             console.log("There was an attempt to create a group with an empty name");
             return res.status(500).send({msg:"Failed to create group"});
         }
-        const owner = [{username:req.jwt.user.username, identifier:req.jwt.user.identifier}];
+        const owner = [req.jwt.user];//{username:req.jwt.username, identifier:req.jwt.identifier}
         console.log("Kollar owner i backend------------------------:", owner);
         const memberObjectArray = members.map(inviteToObject);
 
