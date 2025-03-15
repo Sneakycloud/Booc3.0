@@ -16,11 +16,11 @@ const { sendToSocket, getSocket } = require("../Model/io_socket");
 
 //create event
 async function createEvent(req, res){
-
+    console.log("Creat an event starting");
     const { body: { title, date, fromTime, toTime, location, description, color, repeat, visibility, invitePeople } } = req;
     const createdBy = req.jwt.payload;
     const mappedInvite = invitePeople.map(inviteToObject); //Transforms the [[]] to [{}]
-
+    console.log("Before the post function");
     const result = await eventsMsApi().post(`api/event`,{
         title: title,
         date: date,
