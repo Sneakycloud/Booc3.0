@@ -105,7 +105,7 @@ async function getEvents(req, res){
             console.log("Failed to get events");
             return res.status(500).send({msg:"Failed to get events"});
         }
-        return res.status(200).send({msg:"Got group", group:result});
+        return res.status(200).send({msg:"Got group", group:result.data.events});
     }
     catch(err){
         console.log("Failed to get events");
