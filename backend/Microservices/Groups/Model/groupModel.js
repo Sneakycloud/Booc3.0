@@ -28,9 +28,9 @@ async function getAllGroups(username, identifier){
             ]
         });
         
-        console.log("The following is the group: \n");
-        console.log(group);
-        console.log(group[0].owners[0]);
+        // console.log("The following is the group: \n");
+        // console.log(group);
+        // console.log(group[0].owners[0]);
         
 
         if(!Array.isArray(group) || !group.length){
@@ -53,10 +53,8 @@ async function getAllGroups(username, identifier){
 async function createGroup(groupName, owner, members){
     startmongoose();
     try{
-        console.log("I model innan: ", owner);
         //Create the user
         const newGroup = new groups({groupName, owners:owner, members});
-        console.log("I model efter: ", newGroup.owners);
         await newGroup.save();
         console.log("Group created");
         return newGroup.toObject(); //success
