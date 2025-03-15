@@ -62,8 +62,8 @@ async function createGroup(req, res){
             console.log("There was an attempt to create a group with an empty name");
             return res.status(500).send({msg:"Failed to create group"});
         }
-        const owner = [{username:req.jwt.username, identifier:req.jwt.identifier}];
-        console.log(owner);
+        const owner = [{username:req.jwt.user.username, identifier:req.jwt.user.identifier}];
+        console.log("Kollar owner i backend------------------------:", owner);
         const memberObjectArray = members.map(inviteToObject);
 
         const result = await groupsMsApi().post(`/api/group`,
