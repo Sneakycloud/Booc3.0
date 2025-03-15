@@ -53,10 +53,10 @@ async function getAllGroups(username, identifier){
 async function createGroup(groupName, owner, members){
     startmongoose();
     try{
-        console.log("I model innan: " + owner);
+        console.log("I model innan: ", owner);
         //Create the user
         const newGroup = new groups({groupName, owners:owner, members});
-        console.log("I modelefter: " + newGroup.owners);
+        console.log("I model efter: ", newGroup.owners);
         await newGroup.save();
         console.log("Group created");
         return newGroup.toObject(); //success
