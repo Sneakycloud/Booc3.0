@@ -34,7 +34,8 @@ async function createEvent(req, res){
         mappedInvite: mappedInvite,
         createdBy: createdBy
     });
-
+    console.log("The result from the eventMsApi: ", result);
+    console.log("The res: ", res);
     if (result)
     {
         //Send notification to all group members
