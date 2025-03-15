@@ -22,7 +22,6 @@ function inviteToObject(array){
 async function getGroup(req, res){
     //Gets info
     const groupName = req.query.groupName;
-    //var result = await getGroupModel(groupName);
     const response = await groupsMsApi().get(`/api/group`,
         {params: {
             groupname: groupName,
@@ -37,12 +36,10 @@ async function getGroup(req, res){
 //Get all groups a person is in
 async function getAllGroups(req, res){
     try{
-
-        //var result = await getAllGroupsModel(req.session.user.username, req.session.user.identifier);
         const response = await groupsMsApi().get(`/api/groups`,
             {params: {
-                username: req.jwt.user.username,
-                identifier: req.jwt.user.identifier
+                username: req.jwt.payload.username,
+                identifier: req.jwt.payload.identifier
         }});
         
         if(response.data.user === null){
@@ -67,7 +64,7 @@ async function createGroup(req, res){
         }
         const owner = [{username:req.jwt.username, identifier:req.jwt.identifier}];
         const memberObjectArray = members.map(inviteToObject);
-        //var result = await createGroupModel(groupName, owner, memberObjectArray);
+
         const result = await groupsMsApi().post(`/api/group`,
             {
                 groupname: groupName,
@@ -109,7 +106,7 @@ async function updateGroup(req, res){
                 return res.status(500).send({msg:"Failed to update"});
             }
 
-            const isOwner = await checkIfOwner(currentGroupName, req.jwt.user.username, req.jwt.user.identifier);
+            const isOwner = await checkIfOwner(currentGroupName, req.jwt.payload.username, req.jwt.payload.identifier);
             if(isOwner === null){
 
                 return res.status(403).send({msg:"User does not have the authority to update group"});
@@ -121,16 +118,14 @@ async function updateGroup(req, res){
         }
         //Update group
         try{
-
-            //var result = await updateGroupModel(currentGroupName, groupName, owners, members, {username:req.session.user.username, identifier:req.session.user.identifier});
             var result = await groupsMsApi().put(`/api/group`,
                 {
                     currentGroup: currentGroupName,
                     groupName: groupName,
                     owners: owners,
                     members: members,
-                    username: req.jwt.user.username,
-                    identifier: req.jwt.user.identifier
+                    username: req.jwt.payload.username,
+                    identifier: req.jwt.payload.identifier
                 
             });
             // if(!result || !result.data.group){
@@ -158,11 +153,9 @@ async function updateGroup(req, res){
         }
     }
     catch(err){
-        //console.log(err);
+        console.log(err);
         return res.status(500).send({msg:"Failed to update group"});
     }
-    
-    
 }
 
 //Delete group
@@ -170,7 +163,7 @@ async function deleteGroup(req, res){
     const {body : {groupName}} = req;
     try{
 
-        if((await checkIfOwner(groupName, req.jwt.user.username, req.jwt.user.identifier)) === null){
+        if((await checkIfOwner(groupName, req.jwt.payload.username, req.jwt.payload.identifier)) === null){
 
             console.log("User does not have the authority to delete group")
             return res.status(403).send({msg:"User does not have the authority to delete group"});
@@ -178,7 +171,7 @@ async function deleteGroup(req, res){
     }
     catch(err){
         console.log("Failed to check if the user had authority to delete");
-        //console.log(err);
+        console.log(err);
         return res.status(500).send({msg:"Failed to check if the user had authority to delete"});
     }
     
@@ -190,7 +183,6 @@ async function deleteGroup(req, res){
     // });
 
     //delete group
-    //var result = await deleteGroupModel(groupName);
     const result = await groupsMsApi().delete(`/api/group`,
         {data: {
             groupname: groupName,
@@ -219,8 +211,8 @@ async function leaveGroup(req, res) {
         const result = await groupsMsApi().delete(`/api/groups`,
             {data: {
                 groupName: groupName,
-                username: req.jwt.user.username,
-                identifier: req.jwt.user.identifier
+                username: req.jwt.payload.username,
+                identifier: req.jwt.payload.identifier
             }
         });
 
@@ -253,13 +245,12 @@ async function leaveGroup(req, res) {
         // }
         
         // sendToSocket(null, null, req) //-------------------------------------------------------------------------------------------------------Delete this when sendToSocket works
-
         
         return res.status(200).send({msg:"Left group"});
     }
     catch(err){
         console.error("Error in GET request for group state:", err.response ? err.response.data : err.message);
-        // console.log(err);
+        console.log(err);
         return res.status(500).send({msg:"Failed leave group", error: err.message });
     }
 }
