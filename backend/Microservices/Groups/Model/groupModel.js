@@ -27,11 +27,11 @@ async function getAllGroups(username, identifier){
                 {members:{$all:[user]}},
             ]
         });
-        /*
+        
         console.log("The following is the group: \n");
         console.log(group);
         console.log(group[0].owners[0]);
-        */
+        
 
         if(!Array.isArray(group) || !group.length){
             console.log("Failed to find groups");
