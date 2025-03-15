@@ -54,7 +54,7 @@ async function createGroup(groupName, owner, members){
     startmongoose();
     try{
         //Create the user
-        const newGroup = new groups({groupName,owners:owner, members});
+        const newGroup = new groups({groupName, owner, members});
         console.log("I model: " + newGroup.owners);
         await newGroup.save();
         console.log("Group created");
