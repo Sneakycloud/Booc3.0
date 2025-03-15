@@ -16,39 +16,44 @@ const { sendToSocket, getSocket } = require("../Model/io_socket");
 
 //create event
 async function createEvent(req, res){
+    try {
     console.log("Creat an event starting");
-    const { body: { title, date, fromTime, toTime, location, description, color, repeat, visibility, invitePeople } } = req;
-    const createdBy = req.jwt.payload;
-    const mappedInvite = invitePeople.map(inviteToObject); //Transforms the [[]] to [{}]
-    console.log("Before the post function");
-    const result = await eventsMsApi().post(`api/event`,{
-        title: title,
-        date: date,
-        fromTime: fromTime,
-        toTime: toTime,
-        location: location,
-        description: description,
-        color: color,
-        repeat: repeat,
-        visibility: visibility,
-        mappedInvite: mappedInvite,
-        createdBy: createdBy
-    });
-    console.log("The result from the eventMsApi: ", result);
-    console.log("The res: ", res);
-    if (result)
-    {
-        //Send notification to all group members
-        for(const {username, identifier} of invitePeople){
-            const emitted_obj = {Type:"Create group", Cause:`${req.jwt.payload.username}#${req.jwt.payload.identifier}`,}
-            await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
+        const { body: { title, date, fromTime, toTime, location, description, color, repeat, visibility, invitePeople } } = req;
+        const createdBy = req.jwt.payload;
+        const mappedInvite = invitePeople.map(inviteToObject); //Transforms the [[]] to [{}]
+        console.log("Before the post function");
+        const result = await eventsMsApi().post(`api/event`,{
+            title: title,
+            date: date,
+            fromTime: fromTime,
+            toTime: toTime,
+            location: location,
+            description: description,
+            color: color,
+            repeat: repeat,
+            visibility: visibility,
+            mappedInvite: mappedInvite,
+            createdBy: createdBy
+        });
+        console.log("The result from the eventMsApi: ", result);
+        console.log("The res: ", res);
+        if (result)
+        {
+            //Send notification to all group members
+            for(const {username, identifier} of invitePeople){
+                const emitted_obj = {Type:"Create group", Cause:`${req.jwt.payload.username}#${req.jwt.payload.identifier}`,}
+                await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
+            }
+            return res.status(201).send({result});                          // 201 Created
         }
-        return res.status(201).send({result});                          // 201 Created
+        else
+        {
+            return res.status(400).send({msg:"Failed to create event"});    // 400 Bad Request
+        }
+    } catch(err) {
+        console.log("Couldn't cerate event:", err);
     }
-    else
-    {
-        return res.status(400).send({msg:"Failed to create event"});    // 400 Bad Request
-    }
+    
 }
 
 //delete event
