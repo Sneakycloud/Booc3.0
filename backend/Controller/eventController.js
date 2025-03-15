@@ -39,10 +39,10 @@ async function createEvent(req, res){
     if (result)
     {
         //Send notification to all group members
-        //for(const {username, identifier} of invitePeople){
-        //    const emitted_obj = {Type:"Create group", Cause:`${req.jwt.payload.username}#${req.jwt.payload.identifier}`,}
-        //    await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
-        //}
+        for(const {username, identifier} of invitePeople){
+            const emitted_obj = {Type:"Create group", Cause:`${req.jwt.payload.username}#${req.jwt.payload.identifier}`,}
+            await sendToSocket((await getSocket(username, identifier)), emitted_obj, req);
+        }
         return res.status(201).send({result});                          // 201 Created
     }
     else
