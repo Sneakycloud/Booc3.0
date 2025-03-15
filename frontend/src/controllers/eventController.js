@@ -19,6 +19,17 @@ export async function getEvents(username, identifier){
     return event;
 }
 
+export async function createEvent(formData){
+  var response;
+  try{
+    response = await api().post('/api/event', formData);
+  }
+  catch(err){
+    console.log("Failed to create event in controller");
+    console.log(err);
+  }
+  return response;
+}
 
 
 export async function deleteEvent(_id)

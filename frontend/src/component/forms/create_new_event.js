@@ -19,6 +19,7 @@ import Selector from "./selector";
 
 import dayjs from 'dayjs';
 import {api} from '../../controllers/axiosTemplate';
+import {createEvent} from '../../controllers/eventController';
 import { useRevalidator } from 'react-router';
 
 
@@ -113,7 +114,7 @@ export default function BasicModal() {
         
 
         //const response = await api.post('/api/newEvent', formData);  
-        const response = await api.post('/api/event', formData);
+        const response = await createEvent(formData);
 
         
         if (response.status === 201)
