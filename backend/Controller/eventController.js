@@ -2,9 +2,12 @@
 const eventModel = require('../Model/eventModel');
 const {createEvent:createEventModel,
         deleteEventModel,
-        checkIfCreator} = eventModel;
-const jwt = require('jwt-express');        
+        checkIfCreator,
+        getEvents:getEventsModel} = eventModel;
+const jwt = require('jwt-express');  
+const {eventsMsApi} = require("../AxiosTemplate/AxiosEventMs.js"); 
 
+const axios = require('axios');
 
 function inviteToObject(array){
     return {username:array[0], identifier:array[1]};
@@ -18,7 +21,19 @@ async function createEvent(req, res){
     const createdBy = req.jwt.payload;
     const mappedInvite = invitePeople.map(inviteToObject); //Transforms the [[]] to [{}]
 
-    const result = await createEventModel(title, date, fromTime, toTime, location, description, color, repeat, visibility, mappedInvite, createdBy);
+    const result = await eventsMsApi().post(`api/event`,{
+        title: title,
+        date: date,
+        fromTime: fromTime,
+        toTime: toTime,
+        location: location,
+        description: description,
+        color: color,
+        repeat: repeat,
+        visibility: visibility,
+        mappedInvite: mappedInvite,
+        createdBy: createdBy
+    });
 
     if (result)
     {
@@ -35,21 +50,16 @@ async function createEvent(req, res){
     }
 }
 
-
-
 //delete event
 async function deleteEvent(req, res) {
 
     const { body: { _id } } = req;
-
-
+    console.log(_id);
     //check if the user is the creator of the event
     try {
-
         const isEventCreator = await checkIfCreator(_id, req.jwt.payload.username, req.jwt.payload.identifier);
-
+        
         console.log("Event creator:", isEventCreator);
-
 
         if (isEventCreator === null)
         {
@@ -65,7 +75,10 @@ async function deleteEvent(req, res) {
     //invited people:
     
     //delete the event
-    const result = await deleteEventModel(_id);
+    const result = await eventsMsApi().delete(`/api/event`,
+        {date: {
+            id: _id
+        }});
 
     if (result === null)
     {
@@ -75,16 +88,17 @@ async function deleteEvent(req, res) {
     return res.status(200).send({msg:"Event Deleted"});              // 200 OK
 }
 
-
-
-
 // Get users events
 async function getEvents(req, res){
     try{
         var uName = req.jwt.payload.username;
         var uId = req.jwt.payload.identifier;
-
-        var result = await eventModel.getEvents(uName, uId);
+        
+        var result = await eventsMsApi().get(`/api/event`,
+            {params: {
+                username: uName, 
+                identifier: uId
+            }});
         //console.log(`I controller så ser result ut såhär`, result);
         if (result === null) {
             console.log("Failed to get events");
@@ -99,8 +113,6 @@ async function getEvents(req, res){
     }
     
 }
-
-
 
 module.exports = {
     createEvent,
